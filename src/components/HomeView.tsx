@@ -65,18 +65,40 @@ export const HomeView: React.FC<HomeViewProps> = ({
             A focused environment to practice previous-year Bar Council of India examinations (AIBE IV to XXI), master syllabus subjects systematically, and track real readiness.
           </p>
 
-          {/* Quick Exam Pills (AIBE XXI, XX, XIX, XVIII) */}
-          <div className="pt-1 flex flex-wrap items-center gap-2">
-            <span className="text-xs font-mono text-[#718096] mr-1">Latest Papers:</span>
-            {exams.slice(0, 4).map(ex => (
+          {/* Quick Exam Pills (AIBE XXI through IV with View All option) */}
+          <div className="pt-2 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-bold text-[#718096] uppercase tracking-wider">
+                Select An Examination Paper ({exams.length} Available):
+              </span>
               <button
-                key={ex.id}
-                onClick={() => onStartExam(ex)}
-                className="px-3 py-1 rounded-lg bg-[#FAF8F5] hover:bg-[#1A365D] hover:text-white text-[#1A365D] font-mono text-xs font-bold border border-[#E8E2DA] transition-all"
+                onClick={() => onNavigate('papers')}
+                className="text-xs font-semibold text-[#C05621] hover:underline flex items-center gap-1 font-mono"
               >
-                {ex.name}
+                <span>View Full Papers Directory</span>
+                <ArrowRight className="w-3 h-3" />
               </button>
-            ))}
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-2">
+              {exams.map((ex, idx) => (
+                <button
+                  key={ex.id}
+                  onClick={() => onStartExam(ex)}
+                  className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-all border ${
+                    idx === 0
+                      ? 'bg-[#1A365D] text-white font-bold border-[#1A365D] shadow-xs hover:bg-[#2B6CB0]'
+                      : idx < 4
+                      ? 'bg-[#FAF8F5] hover:bg-[#1A365D] hover:text-white text-[#1A365D] font-bold border-[#CBD5E1]'
+                      : 'bg-white hover:bg-[#1A365D] hover:text-white text-[#4A5568] font-medium border-[#E2E8F0]'
+                  }`}
+                  title={`${ex.name} - 100 Questions`}
+                >
+                  {ex.name.replace(/ \(\d{4}\)/, '')}
+                  <span className="text-[10px] ml-1 opacity-70">({ex.year})</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Primary Action Buttons */}
