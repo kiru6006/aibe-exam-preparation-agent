@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Newsreader', Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Anthropic Signature Colors */
+    --anthropic-bg: #FAF8F5;
+    --anthropic-card: #FFFFFF;
+    --anthropic-card-warm: #F4EFEA;
+    --anthropic-border: #E8E2DA;
+    --anthropic-border-subtle: #F0ECE6;
+    --anthropic-text-primary: #191919;
+    --anthropic-text-secondary: #5C5852;
+    --anthropic-text-muted: #8E887F;
+    --anthropic-terracotta: #CC785C;
+    --anthropic-terracotta-dark: #B66347;
+    --anthropic-terracotta-light: #FBF4F0;
+    --anthropic-stone-dark: #2A2825;
+  }
+
+  body {
+    background-color: var(--anthropic-bg);
+    color: var(--anthropic-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, .font-serif-claude {
+    font-family: var(--font-serif);
+  }
+}
+
+/* Custom scrollbars matching warm parchment style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E2DBD2;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C8BFB3;
+}
