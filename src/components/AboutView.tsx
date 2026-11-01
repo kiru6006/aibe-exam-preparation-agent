@@ -94,3 +94,4 @@ export const AboutView: React.FC = () => {
     </div>
   );
 };
+

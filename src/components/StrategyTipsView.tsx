@@ -652,3 +652,4 @@ export const StrategyTipsView: React.FC<StrategyTipsViewProps> = ({
     </div>
   );
 };
+
