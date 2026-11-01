@@ -42,6 +42,9 @@ jobs:
       - name: Ensure 404.html Fallback for SPA Routing
         run: cp dist/index.html dist/404.html
 
+      - name: Disable Jekyll Processing
+        run: touch dist/.nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
