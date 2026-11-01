@@ -5,15 +5,16 @@ import { QUESTIONS_BANK } from '../src/data/questions';
 
 describe('ExamEngine Unit Tests', () => {
   it('correctly calculates score and accuracy with standard 45% passing mark', () => {
-    const qIds = ["q-const-001", "q-const-002", "q-crpc-001", "q-cpc-001"];
+    // Use first 4 questions from bank
+    const sampleQuestions = QUESTIONS_BANK.slice(0, 4);
+    const qIds = sampleQuestions.map(q => q.id);
     
-    // Answering 3 out of 4 correctly (75% >= 45% -> Pass)
-    const answers = {
-      "q-const-001": "C" as const, // correct
-      "q-const-002": "B" as const, // correct
-      "q-crpc-001": "B" as const,  // correct
-      "q-cpc-001": "A" as const    // wrong (correct is C)
-    };
+    // Answering first 3 correctly, 4th incorrectly
+    const answers: Record<string, "A" | "B" | "C" | "D"> = {};
+    answers[sampleQuestions[0].id] = sampleQuestions[0].correctAnswer;
+    answers[sampleQuestions[1].id] = sampleQuestions[1].correctAnswer;
+    answers[sampleQuestions[2].id] = sampleQuestions[2].correctAnswer;
+    answers[sampleQuestions[3].id] = sampleQuestions[3].correctAnswer === 'A' ? 'B' : 'A';
 
     const result = ExamEngine.calculateResult(qIds, answers, 45);
 
@@ -28,11 +29,11 @@ describe('ExamEngine Unit Tests', () => {
   });
 
   it('correctly handles unanswered questions without penalty', () => {
-    const qIds = ["q-const-001", "q-const-002"];
-    const answers = {
-      "q-const-001": "C" as const
-      // q-const-002 is left unanswered
-    };
+    const sampleQuestions = QUESTIONS_BANK.slice(0, 2);
+    const qIds = sampleQuestions.map(q => q.id);
+    const answers: Record<string, "A" | "B" | "C" | "D"> = {};
+    answers[sampleQuestions[0].id] = sampleQuestions[0].correctAnswer;
+    // second question unanswered
 
     const result = ExamEngine.calculateResult(qIds, answers, 45);
 

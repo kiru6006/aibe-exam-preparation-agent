@@ -133,5 +133,13 @@ export const OFFICIAL_SUBJECTS: Subject[] = [
     shortName: "Land Acquisition",
     weightageQuestions: 2,
     description: "Right to Fair Compensation & Transparency in Land Acquisition"
+  },
+  {
+    id: "general-law",
+    name: "General Law & Legal Theory",
+    shortName: "General Law / Jurisprudence",
+    weightageQuestions: 0,
+    description: "Statutory interpretation, legal maxims, jurisprudence, and unclassified questions"
   }
 ];
+
