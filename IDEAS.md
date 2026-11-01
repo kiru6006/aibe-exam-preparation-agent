@@ -1933,3 +1933,1085 @@ The goal is to create a reliable, fast, free AIBE learning application that stud
 Start with PHASE 0.
 
 Do not start writing the complete application until the source data audit and architecture assessment are complete.
+
+# AIBE Preparation Web App - Major UI, Question Bank, Syllabus and Statistics Update
+
+## 1. Objective
+
+Update the **existing AIBE preparation web application** without breaking or removing any existing functionality.
+
+The application is a free, student-focused AIBE preparation platform designed for Indian law students.
+
+The update must:
+
+1. Replace/update the existing question bank with the latest validated question-bank JSON.
+2. Add a new **Strategy & Tips** screen using the available preparation strategy and syllabus data.
+3. Redesign the visual theme using a polished **Google Material-inspired design system**.
+4. Use a professional **Indian legal education visual identity**.
+5. Add the complete **AIBE Exam Pattern** prominently on the Home page.
+6. Add the current **AIBE syllabus** with subject-wise question distribution.
+7. Research previous AIBE examination statistics from authoritative web sources.
+8. Show the number of candidates who appeared and cleared/passed previous AIBE examinations in a clean table.
+9. Preserve the existing application architecture, navigation and functionality.
+10. Keep the application suitable for **GitHub Pages static deployment**.
+
+Do not create a backend, database, login system, payment system or runtime AI dependency.
+
+## 2. Existing Architecture
+
+Assume the existing application uses:
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Static JSON
+- GitHub Pages deployment
+
+Maintain this architecture.
+
+Do not introduce unnecessary dependencies.
+
+Use the existing project structure wherever possible.
+
+Do not rebuild the entire application from scratch unless a component genuinely needs restructuring.
+
+## 3. Data Files
+
+Use these validated files as the authoritative application data:
+
+### Question Bank
+
+`/mnt/data/aibe_question_bank_webapp.json`
+
+This contains:
+
+- AIBE 4 through AIBE 21
+- 18 exams
+- 1,800 questions
+- 100 questions per exam
+- A/B/C/D options
+- Correct answers
+- Multiple-answer support where applicable
+- Withdrawn-question information
+- Historical exam metadata
+
+Expected validation:
+
+```text
+Exams: 18
+Questions: 1800
+All exams pass: True
+AIBE 19 withdrawn: 7
+AIBE 20 withdrawn: 5
+```
+
+Do not manually recreate these questions.
+
+Do not modify correct answers unless there is a clear data-validation failure.
+
+### Strategy Data
+
+`/mnt/data/aibe_strategy_tips_webapp.json`
+
+Use this for:
+
+- Strategy & Tips
+- Subject Priority
+- Exam preparation recommendations
+- Current syllabus
+- Subject-wise question distribution
+- Question-type strategy
+- Exam-day strategy
+- Mistake-based revision
+- 7-day preparation
+- 15-day preparation
+- 30-day preparation
+
+## 4. Question Bank Integration
+
+Replace the existing question-bank data with:
+
+`aibe_question_bank_webapp.json`
+
+The application must dynamically load questions from this JSON.
+
+Do not hard-code 1,800 questions into React components.
+
+Create reusable data utilities such as:
+
+```text
+getAllExams()
+getExamById()
+getQuestionsByExam()
+getQuestionsBySubject()
+getQuestionsByTopic()
+getQuestionsByQuestionType()
+getQuestionById()
+getWithdrawnQuestions()
+getAvailableSubjects()
+```
+
+Support:
+
+- Year-wise practice
+- Exam-wise practice
+- Subject-wise practice
+- Topic-wise practice
+- Mock tests
+- Question review
+- Correct/wrong/unanswered
+- Practice My Mistakes
+
+## 5. Withdrawn Question Handling
+
+This is important.
+
+Some AIBE questions were withdrawn.
+
+For withdrawn questions:
+
+```text
+status = withdrawn
+scorable = false
+correctAnswer = null
+```
+
+The UI must clearly display:
+
+**Withdrawn by BCI**
+
+Do not mark the student wrong.
+
+Do not include withdrawn questions in score calculations.
+
+Do not calculate them as unanswered.
+
+Example:
+
+```text
+Total Questions: 100
+Withdrawn: 7
+Scorable Questions: 93
+Correct: 70
+Wrong: 15
+Unanswered: 8
+
+Score should be calculated only from the 93 scorable questions.
+```
+
+The UI should explain this clearly when applicable.
+
+## 6. New Navigation Structure
+
+Update the navigation to:
+
+```text
+Home
+Practice
+  ├── Full Exams
+  ├── Subject Practice
+  ├── Topic Practice
+  ├── Mock Test
+  └── Practice My Mistakes
+
+Strategy & Tips
+  ├── How to Prepare
+  ├── Subject Priority
+  ├── What Repeats
+  ├── Question-Type Strategy
+  ├── Exam-Day Strategy
+  └── Preparation Plans
+
+About AIBE
+```
+
+Keep the navigation simple and mobile-friendly.
+
+## 7. New Strategy & Tips Screen
+
+Create a dedicated:
+
+# Strategy & Tips
+
+screen.
+
+This should not look like a long article.
+
+Use cards, sections, tabs and visual priority indicators.
+
+Recommended structure:
+
+```text
+Strategy & Tips
+
+├── How to Prepare
+│
+├── Subject Priority
+│   ├── Critical
+│   ├── High
+│   └── Medium
+│
+├── What Repeats
+│   ├── Subjects
+│   ├── Topics
+│   ├── Provisions
+│   └── Question Patterns
+│
+├── Question-Type Strategy
+│   ├── Direct MCQ
+│   ├── Assertion / Reason
+│   ├── Statement / Conclusion
+│   ├── Case / Scenario
+│   └── Match the Following
+│
+├── Exam-Day Strategy
+│
+├── Mistake-Based Revision
+│
+└── Preparation Plans
+    ├── 7 Days
+    ├── 15 Days
+    └── 30 Days
+```
+
+Every strategy card should have a useful action.
+
+For example:
+
+```text
+Constitutional Law
+10 Questions
+Priority: Critical
+
+[Practice This Subject]
+```
+
+Clicking the button should take the student directly to filtered questions.
+
+## 8. Current AIBE Syllabus
+
+Use the supplied syllabus data.
+
+Display the syllabus prominently.
+
+The current syllabus contains 19 subject groups.
+
+Use the following distribution:
+
+| Subject | Questions | Priority |
+|---|---:|---|
+| Constitutional Law | 10 | Critical |
+| IPC & BNS | 8 | Critical |
+| CrPC & BNSS | 10 | Critical |
+| CPC | 10 | Critical |
+| Evidence Act & BSA | 8 | Critical |
+| Alternative Dispute Resolution including Arbitration | 4 | High |
+| Family Law | 8 | Critical |
+| Public Interest Litigation | 4 | High |
+| Administration Law | 3 | Medium |
+| Professional Ethics & Professional Misconduct | 4 | High |
+| Company Law | 2 | Medium |
+| Environmental Law | 2 | Medium |
+| Cyber Law | 2 | Medium |
+| Labour & Industrial Law | 4 | High |
+| Law of Tort including Motor Vehicle Accident and Consumer Protection Law | 5 | High |
+| Taxation | 4 | High |
+| Contract, Specific Relief, Property Laws and Negotiable Instruments Act | 8 | Critical |
+| Land Acquisition Act | 2 | Medium |
+| Intellectual Property Laws | 2 | Medium |
+
+Show the total:
+
+**100 Questions**
+
+Do not silently change the syllabus.
+
+If the attached syllabus contains additional wording or metadata, preserve it.
+
+## 9. Home Page Redesign
+
+The Home page should become the main student dashboard.
+
+Recommended layout:
+
+```text
+------------------------------------------------
+AIBE PREPARATION
+Prepare Smarter. Practice Better.
+------------------------------------------------
+
+[AIBE 21] [AIBE 20] [AIBE 19] [AIBE 18]
+
+1,800+
+Previous Questions
+
+18
+AIBE Exams
+
+100
+Questions / Exam
+
+19
+Current Subjects
+------------------------------------------------
+
+AIBE EXAM PATTERN
+
+Duration              Questions
+3 Hours                100
+
+Mode                   Question Type
+Offline/OMR*           MCQ
+
+Negative Marking
+No negative marking*
+------------------------------------------------
+
+CURRENT AIBE SYLLABUS
+
+Subject | Questions | Priority
+
+[View Complete Syllabus]
+
+------------------------------------------------
+
+AIBE EXAM STATISTICS
+
+Year | Appeared | Cleared/Passed | Pass %
+
+------------------------------------------------
+
+PREPARATION STRATEGY
+
+[Subject Priority]
+[Practice My Mistakes]
+[7-Day Plan]
+[15-Day Plan]
+[30-Day Plan]
+------------------------------------------------
+```
+
+Do not blindly use the above wording for facts that need verification.
+
+Verify official exam-pattern information against the current AIBE source before displaying it as current fact.
+
+## 10. AIBE Exam Pattern
+
+Create a visually strong exam-pattern card on the Home page.
+
+Include, where officially verified:
+
+- Examination duration
+- Total questions
+- Question format
+- Mode of examination
+- Negative marking policy
+- Qualifying/pass criteria
+- Applicable eligibility information if relevant
+
+Example visual:
+
+```text
+AIBE EXAM PATTERN
+
+100
+Questions
+
+3 Hours
+Duration
+
+MCQ
+Question Format
+
+No Negative Marking
+Scoring
+
+Qualifying Examination
+Purpose
+```
+
+Use icons and clean cards.
+
+Do not overcrowd this section.
+
+## 11. Previous AIBE Candidate Statistics
+
+Research previous AIBE examination statistics from the web.
+
+This is an important requirement.
+
+Do NOT invent statistics.
+
+Search authoritative sources first:
+
+1. Bar Council of India
+2. All India Bar Examination official website
+3. Government sources
+4. Press Information Bureau where applicable
+5. Reputable Indian newspapers
+6. Established education/news publications only when official figures are unavailable
+
+For each year, identify:
+
+```text
+AIBE Year
+Candidates Registered
+Candidates Appeared
+Candidates Passed/Cleared
+Pass Percentage
+Source
+```
+
+Prefer data for AIBE examinations where reliable figures are available.
+
+Possible table:
+
+| AIBE | Appeared | Cleared | Pass % |
+|---|---:|---:|---:|
+| AIBE XVII | verified | verified | calculated |
+| AIBE XVIII | verified | verified | calculated |
+| AIBE XIX | verified | verified | calculated |
+| AIBE XX | verified | verified | calculated |
+| AIBE XXI | verified | verified | calculated |
+
+Do not create rows where reliable data cannot be verified.
+
+If only "appeared" is available but "cleared" is unavailable, display:
+
+```text
+Not officially reported
+```
+
+Do not estimate.
+
+If different sources report conflicting numbers:
+
+1. Prefer the official source.
+2. Show the official number.
+3. Add a small source note.
+4. Do not silently merge figures.
+
+Include a source link beside each row or in a source section.
+
+## 12. Statistics UI
+
+Do not make the statistics table look like an administrative dashboard.
+
+Make it student-friendly.
+
+Example:
+
+```text
+AIBE PARTICIPATION & RESULTS
+
+See how AIBE participation and outcomes have changed.
+
+┌────────┬──────────┬──────────┬──────────┐
+│ AIBE   │ Appeared │ Cleared  │ Pass %   │
+├────────┼──────────┼──────────┼──────────┤
+│ XVIII  │  ...     │  ...     │  ...     │
+│ XIX    │  ...     │  ...     │  ...     │
+│ XX     │  ...     │  ...     │  ...     │
+│ XXI    │  ...     │  ...     │  ...     │
+└────────┴──────────┴──────────┴──────────┘
+
+Source: Official/authoritative sources
+```
+
+Add a simple trend visualization only if the verified data is sufficient.
+
+Do not create a misleading graph from incomplete data.
+
+## 13. Google-Inspired Theme
+
+Redesign the visual system using a **Google Material-inspired design language**.
+
+Do not copy Google's exact website.
+
+Use:
+
+- Material-style cards
+- Rounded surfaces
+- Clean typography
+- Generous spacing
+- Soft elevation
+- Clear hierarchy
+- Simple icons
+- Accessible contrast
+- Responsive layouts
+- Minimal borders
+- Subtle hover states
+- Smooth but restrained transitions
+
+The result should feel:
+
+```text
+Google Material
++
+Indian Legal Education
++
+Professional Law School
++
+Modern Exam Preparation Platform
+```
+
+## 14. Indian Legal Theme
+
+Use a professional Indian visual identity.
+
+Do not make it look like a political party website.
+
+Avoid excessive saffron, green or national-flag styling.
+
+Use a restrained palette inspired by:
+
+- Deep navy
+- Legal blue
+- Warm ivory
+- Muted saffron/gold accent
+- Subtle Indian green accent
+- White/card surfaces
+
+The dominant background should remain professional and readable.
+
+Suggested visual direction:
+
+```text
+Background:
+Warm ivory / very light neutral
+
+Primary:
+Deep legal navy
+
+Secondary:
+Professional blue
+
+Accent:
+Muted saffron/gold
+
+Supporting accent:
+Subtle Indian green
+
+Text:
+Dark charcoal
+```
+
+Do not use bright orange or bright green as dominant colors.
+
+## 15. Legal Background Design
+
+Add subtle legal-professional visual elements.
+
+Possible elements:
+
+- Very subtle Indian Constitution texture
+- Abstract legal document pattern
+- Minimal scales-of-justice watermark
+- Subtle law-book geometry
+- Very light Ashoka Chakra-inspired circular pattern
+- Constitutional/document typography texture
+
+These should remain extremely subtle.
+
+Do not use a large stock photo behind text.
+
+The background must not reduce readability.
+
+## 16. Home Page Hero
+
+Create a stronger hero section.
+
+Example:
+
+```text
+AIBE PREPARATION
+
+Your structured path to AIBE preparation.
+
+Practice previous AIBE questions.
+Understand subject priority.
+Track your mistakes.
+Prepare using the current syllabus.
+
+[Start Practice]
+[Take Mock Test]
+[View Strategy]
+```
+
+Below it:
+
+```text
+18 Exams
+1,800+ Questions
+19 Current Subjects
+100 Questions / Exam
+```
+
+Use real values from the question-bank data.
+
+## 17. Subject Priority UI
+
+Create priority badges:
+
+```text
+CRITICAL
+HIGH
+MEDIUM
+```
+
+Example:
+
+```text
+Constitutional Law
+10 Questions
+
+CRITICAL
+
+[Practice]
+```
+
+The priority must come from the strategy JSON.
+
+Do not manually duplicate priority information throughout components.
+
+## 18. Historical Question Analysis
+
+Use the question-bank data to provide useful historical insights.
+
+Where reliable classification exists, show:
+
+```text
+Previous AIBE Coverage
+
+Subjects
+Topics
+Question Types
+```
+
+Important:
+
+Historical frequency is evidence, not a guarantee of future questions.
+
+Show a disclaimer:
+
+> Historical question patterns can help prioritize preparation, but they do not predict the next AIBE paper.
+
+## 19. Practice My Mistakes
+
+Make this a prominent feature.
+
+After completing a test:
+
+```text
+Your Result
+
+Correct       72
+Wrong         18
+Unanswered    5
+Withdrawn     5
+```
+
+Then:
+
+```text
+[Practice Wrong Questions]
+[Review Answers]
+[Retry Test]
+```
+
+Store mistakes locally using `localStorage`.
+
+No backend is required.
+
+Example:
+
+```text
+aibe_mistakes
+aibe_test_history
+aibe_preferences
+```
+
+Students should be able to revisit mistakes across sessions.
+
+## 20. Mock Test Experience
+
+Improve the test interface.
+
+Display:
+
+```text
+Question 37 / 100
+
+[Progress bar]
+
+Question text
+
+A. ...
+B. ...
+C. ...
+D. ...
+
+[Previous]
+[Mark for Review]
+[Next]
+```
+
+Provide:
+
+- Question navigator
+- Answered count
+- Unanswered count
+- Marked-for-review count
+- Submit confirmation
+- Results
+- Detailed review
+
+For multiple-answer questions, clearly indicate:
+
+**Select all correct answers.**
+
+## 21. Results Screen
+
+Use a professional results dashboard.
+
+Example:
+
+```text
+TEST RESULT
+
+72 / 93
+Scorable Questions
+
+77.4%
+
+Correct       72
+Wrong         18
+Unanswered     3
+Withdrawn      7
+
+[Review Answers]
+[Practice Mistakes]
+[Try Again]
+```
+
+Do not show a "PASS" label unless the applicable official qualifying rule is configured and the result can be meaningfully compared.
+
+## 22. Mobile Design
+
+The application must work well on:
+
+- Desktop
+- Laptop
+- Tablet
+- Mobile
+
+On mobile:
+
+- Bottom navigation or compact menu
+- Cards become single-column
+- Tables become horizontally scrollable or responsive cards
+- Question navigator should remain usable
+- Buttons must be touch-friendly
+
+## 23. Accessibility
+
+Implement:
+
+- Keyboard navigation
+- Visible focus states
+- Proper button semantics
+- Accessible labels
+- Good color contrast
+- No color-only status indicators
+- Screen-reader-friendly headings
+
+Do not rely on color alone for:
+
+```text
+Correct
+Wrong
+Critical
+High
+Medium
+Withdrawn
+```
+
+## 24. Performance
+
+The app must remain lightweight.
+
+Do not add:
+
+- Runtime AI APIs
+- Large UI frameworks unnecessarily
+- Backend services
+- Database
+- Authentication
+- Analytics SDK unless already present
+
+Use:
+
+- Lazy-loaded routes where useful
+- Memoization only where needed
+- Efficient filtering
+- Static JSON
+- LocalStorage for student state
+
+## 25. GitHub Pages Compatibility
+
+The final application must work correctly when deployed to GitHub Pages.
+
+Verify:
+
+```text
+npm run build
+```
+
+and the GitHub Pages base path.
+
+If using React Router, ensure GitHub Pages compatibility.
+
+HashRouter is acceptable if it simplifies deployment.
+
+Do not require server-side routing.
+
+## 26. Data Validation
+
+Before completing the update, validate:
+
+```text
+18 exams
+1,800 questions
+100 questions per exam
+Question numbers 1-100
+A/B/C/D options
+Correct answers present for active questions
+Withdrawn questions correctly handled
+No duplicate canonical question IDs
+No invalid exam IDs
+No broken subject references
+```
+
+Also validate:
+
+```text
+AIBE 19 withdrawn = 7
+AIBE 20 withdrawn = 5
+```
+
+Do not silently alter the validated source data.
+
+## 27. UI Components
+
+Create reusable components such as:
+
+```text
+AppHeader
+HomeHero
+ExamStats
+ExamPatternCard
+SyllabusOverview
+SyllabusTable
+AibeStatisticsTable
+StrategyCard
+PriorityBadge
+PracticeCard
+QuestionCard
+QuestionNavigator
+TestProgress
+ResultSummary
+MistakeCard
+Footer
+```
+
+Avoid giant React components.
+
+Separate:
+
+```text
+data
+components
+pages
+services
+utils
+types
+```
+
+where appropriate.
+
+## 28. Suggested Home Page Information Hierarchy
+
+The Home page should follow this order:
+
+```text
+1. Hero
+2. Quick Statistics
+3. Start Practice
+4. AIBE Exam Pattern
+5. Current AIBE Syllabus
+6. Previous AIBE Statistics
+7. Preparation Strategy
+8. Practice My Mistakes
+9. Important Disclaimer / Sources
+```
+
+The student should understand the exam within the first screen or two without opening another page.
+
+## 29. Do Not Remove Existing Features
+
+Before making changes:
+
+1. Inspect the current application.
+2. Identify existing routes.
+3. Identify existing components.
+4. Identify current question-bank implementation.
+5. Identify current scoring logic.
+6. Identify current theme.
+7. Identify current deployment configuration.
+
+Then update incrementally.
+
+Do not remove working features just to simplify implementation.
+
+## 30. Research Rules
+
+For web-researched AIBE statistics:
+
+- Use authoritative sources.
+- Record source URL.
+- Record source title.
+- Record publication date where available.
+- Record which AIBE edition the number refers to.
+- Distinguish registered vs appeared vs passed.
+- Do not confuse "qualified advocates" with "candidates appeared."
+- Do not confuse "results declared" with "candidates passed."
+- Do not infer missing numbers.
+- Do not copy statistics from random coaching websites when official numbers exist.
+
+Create a local static data file such as:
+
+```text
+src/data/aibeStatistics.json
+```
+
+Example:
+
+```json
+{
+  "source": "...",
+  "verified": true,
+  "exam": "AIBE XX",
+  "appeared": 0,
+  "cleared": 0,
+  "passPercentage": 0
+}
+```
+
+Replace placeholder values only after verification.
+
+## 31. Source Transparency
+
+At the bottom of the statistics section:
+
+```text
+Sources
+
+Official AIBE / Bar Council of India sources are preferred.
+Statistics are shown only where they can be reasonably verified.
+```
+
+Allow the student to open the source.
+
+Do not hide the source information.
+
+## 32. Final Quality Bar
+
+The final product should NOT look like:
+
+- A generic CRUD dashboard
+- An admin panel
+- A government portal
+- A basic Tailwind template
+- A simple question-answer website
+
+It should look like a serious:
+
+**Indian legal education and AIBE preparation platform.**
+
+The visual quality should be comparable to a modern Google-style education product.
+
+## 33. Final Acceptance Criteria
+
+Do not consider the work complete until all of these pass:
+
+### Data
+
+- [ ] 1,800 questions loaded
+- [ ] AIBE 4-21 available
+- [ ] 100 questions per exam
+- [ ] Withdrawn questions handled correctly
+- [ ] Multiple-answer questions supported
+- [ ] No question-bank corruption
+
+### Features
+
+- [ ] Home page updated
+- [ ] Strategy & Tips screen added
+- [ ] Current syllabus displayed
+- [ ] Subject priorities displayed
+- [ ] AIBE exam pattern displayed
+- [ ] Historical AIBE statistics displayed
+- [ ] Practice My Mistakes working
+- [ ] Existing mock tests working
+- [ ] Existing scoring working
+
+### Design
+
+- [ ] Google Material-inspired theme
+- [ ] Indian legal professional color palette
+- [ ] Professional typography
+- [ ] Subtle legal visual background
+- [ ] Responsive mobile design
+- [ ] Accessible UI
+- [ ] No excessive visual clutter
+
+### Research
+
+- [ ] AIBE statistics researched
+- [ ] Official sources preferred
+- [ ] Appeared vs passed clearly separated
+- [ ] Pass percentage calculated only from verified numbers
+- [ ] Sources displayed
+
+### Engineering
+
+- [ ] TypeScript passes
+- [ ] Tests pass
+- [ ] Production build passes
+- [ ] GitHub Pages deployment works
+- [ ] No backend introduced
+- [ ] No runtime AI dependency
+- [ ] No PDFs shipped unnecessarily
+
+## 34. Important Implementation Principle
+
+Do not simply add more content.
+
+Improve the student's decision-making.
+
+The application should answer these questions immediately:
+
+```text
+What is AIBE?
+What is the exam pattern?
+What is the current syllabus?
+Which subjects deserve more preparation time?
+How can I practice previous questions?
+Where am I making mistakes?
+How should I prepare in the final 7/15/30 days?
+```
+
+The final UI should make these answers obvious.
+
+First inspect the existing application and its architecture. Then implement the update incrementally, preserving existing functionality.

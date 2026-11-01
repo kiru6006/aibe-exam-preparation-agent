@@ -2,7 +2,16 @@ import React, { useState } from 'react';
 import type { Question, Answer, OptionKey } from '../types';
 import { Timer } from './Timer';
 import { QuestionPalette } from './QuestionPalette';
-import { Flag, ChevronLeft, ChevronRight, CheckCircle2, RotateCcw, ShieldCheck } from 'lucide-react';
+import { 
+  Flag, 
+  ChevronLeft, 
+  ChevronRight, 
+  CheckCircle2, 
+  RotateCcw, 
+  ShieldAlert,
+  Info,
+  Layers
+} from 'lucide-react';
 
 interface ExamViewProps {
   title: string;
@@ -31,11 +40,11 @@ export const ExamView: React.FC<ExamViewProps> = ({
   if (questions.length === 0) {
     return (
       <div className="max-w-2xl mx-auto py-16 text-center">
-        <h2 className="text-xl font-serif text-[#191919]">No questions available</h2>
-        <p className="text-sm text-[#5C5852] mt-2">There are no questions configured for this session.</p>
+        <h2 className="text-xl font-serif text-[#1A365D]">No questions available</h2>
+        <p className="text-sm text-[#4A5568] mt-2">There are no questions configured for this session.</p>
         <button
           onClick={onExit}
-          className="mt-6 px-4 py-2 bg-[#2A2825] text-white rounded-lg hover:bg-black text-xs font-medium"
+          className="mt-6 px-4 py-2 bg-[#1A365D] text-white rounded-lg hover:bg-[#2B6CB0] text-xs font-medium"
         >
           Return Home
         </button>
@@ -44,14 +53,42 @@ export const ExamView: React.FC<ExamViewProps> = ({
   }
 
   const currentQuestion = questions[currentIndex];
+  const isWithdrawn = currentQuestion.status === "withdrawn" || currentQuestion.scorable === false;
+  const isMultiAnswer = Array.isArray(currentQuestion.correctAnswer);
   const selectedAnswer = answers[currentQuestion.id] || null;
   const isMarked = marked.includes(currentQuestion.id);
 
+  // Handle single or multi-option selection
   const handleSelectOption = (key: OptionKey) => {
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: key
-    }));
+    if (isWithdrawn) return; // Withdrawn questions cannot be scored
+
+    if (isMultiAnswer) {
+      setAnswers(prev => {
+        const cur = prev[currentQuestion.id];
+        let arr: OptionKey[] = [];
+        if (Array.isArray(cur)) {
+          arr = [...cur];
+        } else if (typeof cur === 'string') {
+          arr = [cur as OptionKey];
+        }
+
+        if (arr.includes(key)) {
+          arr = arr.filter(k => k !== key);
+        } else {
+          arr.push(key);
+        }
+
+        return {
+          ...prev,
+          [currentQuestion.id]: arr.length > 0 ? arr : null
+        };
+      });
+    } else {
+      setAnswers(prev => ({
+        ...prev,
+        [currentQuestion.id]: key
+      }));
+    }
   };
 
   const handleClearAnswer = () => {
@@ -70,8 +107,24 @@ export const ExamView: React.FC<ExamViewProps> = ({
     );
   };
 
-  const answeredCount = Object.values(answers).filter(Boolean).length;
-  const unansweredCount = questions.length - answeredCount;
+  // Check if option is selected
+  const isOptionSelected = (key: OptionKey): boolean => {
+    if (!selectedAnswer) return false;
+    if (Array.isArray(selectedAnswer)) {
+      return selectedAnswer.includes(key);
+    }
+    return selectedAnswer === key;
+  };
+
+  // Section 5: Withdrawn questions do not count towards answered/unanswered counts
+  const scorableQuestions = questions.filter(q => q.status !== 'withdrawn' && q.scorable !== false);
+  const answeredCount = scorableQuestions.filter(q => {
+    const a = answers[q.id];
+    if (Array.isArray(a)) return a.length > 0;
+    return !!a;
+  }).length;
+  const unansweredCount = scorableQuestions.length - answeredCount;
+  const withdrawnCount = questions.length - scorableQuestions.length;
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans">
@@ -81,15 +134,15 @@ export const ExamView: React.FC<ExamViewProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={onExit}
-              className="text-xs font-medium px-2.5 py-1.5 rounded-lg border border-[#E8E2DA] text-[#5C5852] bg-white hover:bg-[#F4EFEA] transition-colors"
+              className="text-xs font-medium px-2.5 py-1.5 rounded-lg border border-[#E8E2DA] text-[#4A5568] bg-white hover:bg-[#F4EFEA] transition-colors"
             >
               Exit Session
             </button>
             <div>
-              <h2 className="text-sm sm:text-base font-serif font-medium text-[#191919] leading-tight">
+              <h2 className="text-sm sm:text-base font-serif font-bold text-[#1A365D] leading-tight">
                 {title}
               </h2>
-              <span className="text-[11px] text-[#78716C] font-mono">
+              <span className="text-[11px] text-[#718096] font-mono">
                 Question {currentIndex + 1} of {questions.length}
               </span>
             </div>
@@ -104,9 +157,9 @@ export const ExamView: React.FC<ExamViewProps> = ({
             )}
             <button
               onClick={() => setShowConfirmSubmit(true)}
-              className="px-3.5 py-1.5 bg-[#2A2825] hover:bg-[#191919] text-[#FAF8F5] text-xs font-medium rounded-lg shadow-xs transition-colors flex items-center gap-1.5"
+              className="px-3.5 py-1.5 bg-[#1A365D] hover:bg-[#2B6CB0] text-white text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center gap-1.5"
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#CC785C]" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#D69E2E]" />
               <span>Submit Exam</span>
             </button>
           </div>
@@ -119,96 +172,127 @@ export const ExamView: React.FC<ExamViewProps> = ({
         <div className="lg:col-span-3 space-y-4">
           <div className="bg-white rounded-2xl border border-[#E8E2DA] p-6 sm:p-8 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
             {/* Metadata Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-[#F0ECE6] text-xs text-[#78716C]">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-[#F0ECE6] text-xs text-[#718096]">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded bg-[#F4EFEA] text-[#2A2825] font-mono text-[11px]">
-                  {currentQuestion.examName || "AIBE"} • {currentQuestion.set || "Official"}
+                <span className="px-2 py-0.5 rounded bg-[#FAF8F5] text-[#1A365D] font-mono text-[11px] font-bold border border-[#E8E2DA]">
+                  {currentQuestion.examName || `AIBE (${currentQuestion.year})`}
                 </span>
-                {currentQuestion.verified && (
-                  <span className="flex items-center gap-1 text-[#3F6212] bg-[#F7FEE7] px-2 py-0.5 rounded border border-[#D9F99D] text-[11px]">
-                    <ShieldCheck className="w-3 h-3 text-[#65A30D]" />
-                    <span>Verified</span>
+                <span className="text-[#A0AEC0]">•</span>
+                <span className="font-serif font-medium text-[#4A5568]">
+                  {currentQuestion.subjectName || currentQuestion.subjectId}
+                </span>
+                {currentQuestion.topicId && (
+                  <>
+                    <span className="text-[#A0AEC0]">•</span>
+                    <span className="text-[#718096] text-[11px]">{currentQuestion.topicId}</span>
+                  </>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                {isWithdrawn ? (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FEF2F2] text-[#991B1B] border border-[#FECACA] font-mono text-[10px] font-bold uppercase">
+                    <ShieldAlert className="w-3 h-3 text-[#991B1B]" />
+                    Withdrawn by BCI (Not Scorable)
+                  </span>
+                ) : (
+                  <span className="font-mono text-[11px] text-[#22543D] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#BBF7D0]">
+                    1 Mark
                   </span>
                 )}
-              </div>
-
-              <div className="flex items-center gap-2">
                 <button
                   onClick={handleToggleMark}
-                  className={`flex items-center gap-1 px-3 py-1 rounded-lg border text-xs font-medium transition-colors ${
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ${
                     isMarked
-                      ? 'bg-[#FBF4F0] text-[#B66347] border-[#F0D5C9]'
-                      : 'border-[#E8E2DA] text-[#5C5852] hover:bg-[#F4EFEA]'
+                      ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
+                      : 'border-[#E8E2DA] text-[#718096] hover:bg-[#FAF8F5]'
                   }`}
-                  aria-pressed={isMarked}
                 >
-                  <Flag className={`w-3 h-3 ${isMarked ? 'fill-[#CC785C] text-[#CC785C]' : ''}`} />
+                  <Flag className="w-3 h-3" />
                   <span>{isMarked ? 'Marked' : 'Mark for Review'}</span>
                 </button>
-
-                {selectedAnswer && (
-                  <button
-                    onClick={handleClearAnswer}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#E8E2DA] text-[#78716C] hover:text-[#191919] hover:bg-[#F4EFEA] text-xs transition-colors"
-                  >
-                    <RotateCcw className="w-3 h-3" />
-                    <span>Clear</span>
-                  </button>
-                )}
               </div>
             </div>
+
+            {/* Withdrawn Notice if applicable */}
+            {isWithdrawn && (
+              <div className="mt-4 p-3.5 bg-[#FFF5F5] border border-[#FEB2B2] rounded-xl flex items-start gap-2.5 text-xs text-[#9B2C2C]">
+                <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
+                <div>
+                  <strong>Withdrawn by Bar Council of India:</strong>
+                  <p className="mt-0.5 font-serif">
+                    This question was officially cancelled/withdrawn by BCI. It is excluded from total scorable marks and will not be penalized or counted against you.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Multiple Correct Notice if applicable */}
+            {isMultiAnswer && !isWithdrawn && (
+              <div className="mt-4 p-3 bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl flex items-center gap-2 text-xs text-[#1E40AF] font-medium">
+                <Info className="w-4 h-4 shrink-0" />
+                <span>Multiple correct options recognized by BCI. Select all that apply.</span>
+              </div>
+            )}
 
             {/* Question Text */}
             <div className="py-6">
-              <div className="text-[11px] font-mono uppercase tracking-widest text-[#CC785C] mb-2">
+              <div className="text-[11px] font-mono text-[#718096] uppercase mb-1">
                 Question {currentIndex + 1}
               </div>
-              <p className="text-lg sm:text-xl text-[#191919] font-serif leading-relaxed select-text whitespace-pre-wrap">
+              <h3 className="text-base sm:text-lg font-serif font-bold text-[#1A365D] leading-relaxed">
                 {currentQuestion.question}
-              </p>
+              </h3>
             </div>
 
-            {/* Options List */}
+            {/* Options */}
             <div className="space-y-3 pt-2">
               {(['A', 'B', 'C', 'D'] as OptionKey[]).map(key => {
                 const text = currentQuestion.options[key];
-                const isSelected = selectedAnswer === key;
+                if (!text) return null;
+                const isSelected = isOptionSelected(key);
 
                 return (
                   <div
                     key={key}
                     onClick={() => handleSelectOption(key)}
-                    className={`flex items-start gap-3.5 p-4 rounded-xl border transition-all cursor-pointer select-none ${
-                      isSelected
-                        ? 'bg-[#FBF4F0] border-[#CC785C] ring-1 ring-[#CC785C] shadow-2xs'
-                        : 'bg-white border-[#E8E2DA] hover:border-[#D5CDC2] hover:bg-[#FAF8F5]'
+                    className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer ${
+                      isWithdrawn
+                        ? 'opacity-60 cursor-not-allowed border-[#E8E2DA] bg-[#FAF8F5]'
+                        : isSelected
+                        ? 'border-[#1A365D] bg-[#1A365D]/5 shadow-xs'
+                        : 'border-[#E8E2DA] hover:border-[#1A365D]/40 bg-white hover:bg-[#FAF8F5]'
                     }`}
-                    role="radio"
-                    aria-checked={isSelected}
-                    tabIndex={0}
-                    onKeyDown={e => {
-                      if (e.key === ' ' || e.key === 'Enter') {
-                        e.preventDefault();
-                        handleSelectOption(key);
-                      }
-                    }}
                   >
-                    <span 
-                      className={`w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono shrink-0 transition-colors ${
+                    <span
+                      className={`inline-flex w-7 h-7 rounded-lg items-center justify-center font-mono font-bold text-xs shrink-0 transition-colors ${
                         isSelected
-                          ? 'bg-[#CC785C] text-white font-bold'
-                          : 'bg-[#F4EFEA] text-[#5C5852] border border-[#E8E2DA]'
+                          ? 'bg-[#1A365D] text-white'
+                          : 'bg-[#FAF8F5] text-[#1A365D] border border-[#E8E2DA]'
                       }`}
                     >
                       {key}
                     </span>
-                    <span className="text-sm sm:text-base text-[#191919] pt-0.5 leading-relaxed font-sans">
+                    <span className="text-sm sm:text-base text-[#2D3748] pt-0.5 leading-relaxed font-sans">
                       {text}
                     </span>
                   </div>
                 );
               })}
             </div>
+
+            {/* Clear selection action */}
+            {selectedAnswer && !isWithdrawn && (
+              <div className="pt-4 flex justify-end">
+                <button
+                  onClick={handleClearAnswer}
+                  className="text-xs text-[#718096] hover:text-[#991B1B] font-mono flex items-center gap-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Clear Selection</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Bottom Navigation Controls */}
@@ -216,32 +300,32 @@ export const ExamView: React.FC<ExamViewProps> = ({
             <button
               onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
               disabled={currentIndex === 0}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-medium transition-colors ${
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-medium transition-colors ${
                 currentIndex === 0
-                  ? 'border-[#E8E2DA] text-[#A8A29E] cursor-not-allowed bg-transparent'
-                  : 'border-[#E8E2DA] text-[#2A2825] hover:bg-white bg-[#F4EFEA]'
+                  ? 'border-[#E8E2DA] text-[#A0AEC0] cursor-not-allowed bg-transparent'
+                  : 'border-[#E8E2DA] text-[#1A365D] hover:bg-white bg-[#FAF8F5]'
               }`}
             >
               <ChevronLeft className="w-4 h-4" />
               <span>Previous</span>
             </button>
 
-            <span className="text-xs text-[#78716C] font-mono">
+            <span className="text-xs text-[#718096] font-mono">
               {currentIndex + 1} / {questions.length}
             </span>
 
             {currentIndex < questions.length - 1 ? (
               <button
                 onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#2A2825] hover:bg-[#191919] text-white text-xs font-medium transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#1A365D] hover:bg-[#2B6CB0] text-white text-xs font-semibold transition-colors"
               >
                 <span>Next Question</span>
-                <ChevronRight className="w-4 h-4 text-[#CC785C]" />
+                <ChevronRight className="w-4 h-4 text-[#D69E2E]" />
               </button>
             ) : (
               <button
                 onClick={() => setShowConfirmSubmit(true)}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#CC785C] hover:bg-[#B66347] text-white text-xs font-semibold shadow-xs transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#C05621] hover:bg-[#9C4221] text-white text-xs font-semibold shadow-xs transition-colors"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Review & Submit</span>
@@ -265,30 +349,36 @@ export const ExamView: React.FC<ExamViewProps> = ({
 
       {/* Confirmation Modal */}
       {showConfirmSubmit && (
-        <div className="fixed inset-0 z-50 bg-[#191919]/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#1A365D]/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl border border-[#E8E2DA] max-w-md w-full p-6 shadow-xl space-y-4 font-sans">
-            <h3 className="text-lg font-serif font-medium text-[#191919]">Submit Examination?</h3>
-            <p className="text-xs text-[#5C5852] leading-relaxed">
-              Are you ready to submit your answers and view your performance evaluation?
+            <h3 className="text-lg font-serif font-bold text-[#1A365D]">Submit Examination?</h3>
+            <p className="text-xs text-[#4A5568] leading-relaxed">
+              Are you ready to submit your answers and generate your official evaluation score?
             </p>
 
             <div className="bg-[#FAF8F5] rounded-xl p-4 border border-[#E8E2DA] grid grid-cols-3 gap-2 text-center text-xs">
               <div>
-                <span className="block font-serif text-lg text-[#191919]">{questions.length}</span>
-                <span className="text-[#78716C] text-[11px]">Total</span>
+                <span className="block font-serif text-lg font-bold text-[#1A365D]">{scorableQuestions.length}</span>
+                <span className="text-[#718096] text-[11px]">Scorable Qs</span>
               </div>
               <div>
-                <span className="block font-serif text-lg text-[#3F6212]">{answeredCount}</span>
-                <span className="text-[#78716C] text-[11px]">Answered</span>
+                <span className="block font-serif text-lg font-bold text-[#22543D]">{answeredCount}</span>
+                <span className="text-[#718096] text-[11px]">Answered</span>
               </div>
               <div>
-                <span className="block font-serif text-lg text-[#B66347]">{unansweredCount}</span>
-                <span className="text-[#78716C] text-[11px]">Unanswered</span>
+                <span className="block font-serif text-lg font-bold text-[#C05621]">{unansweredCount}</span>
+                <span className="text-[#718096] text-[11px]">Unanswered</span>
               </div>
             </div>
 
+            {withdrawnCount > 0 && (
+              <p className="text-[11px] text-[#718096] bg-[#FAF8F5] p-2 rounded-lg border border-[#E8E2DA] font-mono text-center">
+                {withdrawnCount} question(s) withdrawn by BCI excluded from score calculation.
+              </p>
+            )}
+
             {marked.length > 0 && (
-              <p className="text-xs text-[#8A5B4C] bg-[#FBF4F0] p-2.5 rounded-lg border border-[#F0D5C9]">
+              <p className="text-xs text-[#B45309] bg-[#FFFBEB] p-2.5 rounded-lg border border-[#FDE68A]">
                 You have {marked.length} question(s) marked for review.
               </p>
             )}
@@ -296,7 +386,7 @@ export const ExamView: React.FC<ExamViewProps> = ({
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setShowConfirmSubmit(false)}
-                className="px-4 py-2 border border-[#E8E2DA] text-[#5C5852] text-xs font-medium rounded-lg hover:bg-[#F4EFEA]"
+                className="px-4 py-2 border border-[#E8E2DA] text-[#4A5568] text-xs font-medium rounded-lg hover:bg-[#FAF8F5]"
               >
                 Keep Answering
               </button>
@@ -305,7 +395,7 @@ export const ExamView: React.FC<ExamViewProps> = ({
                   setShowConfirmSubmit(false);
                   onSubmit(answers, marked);
                 }}
-                className="px-4 py-2 bg-[#2A2825] hover:bg-black text-white text-xs font-semibold rounded-lg"
+                className="px-4 py-2 bg-[#1A365D] hover:bg-[#2B6CB0] text-white text-xs font-semibold rounded-lg"
               >
                 Confirm & Submit
               </button>

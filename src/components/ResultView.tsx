@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Question, Answer, ExamResult } from '../types';
+import { ExamEngine } from '../services/examEngine';
 import { 
   HelpCircle, 
   Flag, 
@@ -8,7 +9,9 @@ import {
   X, 
   ArrowRight,
   LayoutGrid,
-  List
+  List,
+  ShieldAlert,
+  Info
 } from 'lucide-react';
 
 interface ResultViewProps {
@@ -22,7 +25,7 @@ interface ResultViewProps {
   onPracticeMistakes?: () => void;
 }
 
-type ReviewFilter = "all" | "correct" | "wrong" | "unanswered" | "marked";
+type ReviewFilter = "all" | "correct" | "wrong" | "unanswered" | "withdrawn" | "marked";
 
 export const ResultView: React.FC<ResultViewProps> = ({
   title,
@@ -38,59 +41,71 @@ export const ResultView: React.FC<ResultViewProps> = ({
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
 
   const filteredQuestions = questions.filter(q => {
+    const isWithdrawn = q.status === "withdrawn" || q.scorable === false;
+    if (filter === "withdrawn") return isWithdrawn;
+
     const selected = answers[q.id];
-    const isCorrect = selected === q.correctAnswer;
-    const isUnanswered = !selected;
+    const isCorrect = ExamEngine.isAnswerCorrect(selected, q.correctAnswer);
+    const isUnanswered = !selected || (Array.isArray(selected) && selected.length === 0);
     const isMarked = marked.includes(q.id);
 
-    if (filter === "correct") return isCorrect;
-    if (filter === "wrong") return !isCorrect && !isUnanswered;
-    if (filter === "unanswered") return isUnanswered;
+    if (filter === "correct") return !isWithdrawn && isCorrect;
+    if (filter === "wrong") return !isWithdrawn && !isCorrect && !isUnanswered;
+    if (filter === "unanswered") return !isWithdrawn && isUnanswered;
     if (filter === "marked") return isMarked;
     return true;
   });
 
+  const scorableQuestions = questions.filter(q => q.status !== 'withdrawn' && q.scorable !== false);
+  const withdrawnQuestions = questions.filter(q => q.status === 'withdrawn' || q.scorable === false);
+
+  const formatAnswerDisplay = (ans: Answer): string => {
+    if (!ans) return '-';
+    if (Array.isArray(ans)) return ans.join(', ');
+    return ans;
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-8 font-sans">
-      {/* Top Banner / Card */}
-      <div className="bg-white rounded-2xl border border-[#E8E2DA] p-6 sm:p-8 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
+      {/* Top Banner / Assessment Card */}
+      <div className="bg-white rounded-2xl border border-[#E8E2DA] p-6 sm:p-8 shadow-[0_2px_8px_rgba(26,54,93,0.04)]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[#F0ECE6]">
           <div>
-            <div className="text-[11px] font-mono uppercase tracking-wider text-[#78716C] mb-1">
-              Assessment Summary
+            <div className="text-[11px] font-mono uppercase tracking-wider text-[#718096] mb-1">
+              Assessment Summary & Official Evaluation
             </div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-medium text-[#191919]">{title}</h1>
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#1A365D]">{title}</h1>
           </div>
 
           <div className="flex items-center gap-2.5">
             <button
               onClick={onRetry}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 border border-[#E8E2DA] text-[#2A2825] text-xs font-medium rounded-lg hover:bg-[#F4EFEA] transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 border border-[#E8E2DA] text-[#1A365D] text-xs font-medium rounded-xl hover:bg-[#FAF8F5] transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reattempt</span>
             </button>
             <button
               onClick={onExit}
-              className="px-3.5 py-1.5 bg-[#2A2825] hover:bg-black text-white text-xs font-medium rounded-lg transition-colors"
+              className="px-3.5 py-2 bg-[#1A365D] hover:bg-[#2B6CB0] text-white text-xs font-semibold rounded-xl transition-colors shadow-xs"
             >
               Dashboard
             </button>
           </div>
         </div>
 
-        {/* Score Grid in Anthropic style */}
+        {/* Score Grid adhering strictly to Section 5 with Withdrawn Questions */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-6">
           <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#78716C] block uppercase">Score</span>
+            <span className="text-[11px] font-mono text-[#718096] block uppercase font-bold">Scorable Score</span>
             <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-2xl sm:text-3xl font-serif text-[#191919]">{result.score}</span>
-              <span className="text-xs text-[#78716C] font-mono">/ {result.total}</span>
+              <span className="text-2xl sm:text-3xl font-serif font-bold text-[#1A365D]">{result.score}</span>
+              <span className="text-xs text-[#718096] font-mono">/ {result.scorableTotal || scorableQuestions.length}</span>
             </div>
             {result.passed !== undefined && (
-              <span className={`text-[10px] font-mono font-medium mt-1 inline-block px-1.5 py-0.5 rounded border ${
+              <span className={`text-[10px] font-mono font-bold mt-1 inline-block px-1.5 py-0.5 rounded border ${
                 result.passed 
-                  ? 'bg-[#F7FEE7] text-[#3F6212] border-[#D9F99D]' 
+                  ? 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]' 
                   : 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]'
               }`}>
                 {result.passed ? 'QUALIFIED (≥45%)' : 'BELOW 45%'}
@@ -99,236 +114,248 @@ export const ResultView: React.FC<ResultViewProps> = ({
           </div>
 
           <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#3F6212] block uppercase">Correct</span>
-            <span className="text-2xl sm:text-3xl font-serif text-[#3F6212] mt-1 block">
+            <span className="text-[11px] font-mono text-[#22543D] block uppercase font-bold">Correct</span>
+            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#22543D] mt-1 block">
               {result.correct}
             </span>
-            <span className="text-[11px] text-[#78716C] mt-1 block font-mono">
-              {result.total > 0 ? ((result.correct / result.total) * 100).toFixed(1) : 0}%
+            <span className="text-[11px] text-[#718096] mt-1 block font-mono">
+              {result.accuracy ? result.accuracy.toFixed(1) : 0}% Accuracy
             </span>
           </div>
 
           <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#991B1B] block uppercase">Wrong</span>
-            <span className="text-2xl sm:text-3xl font-serif text-[#991B1B] mt-1 block">
+            <span className="text-[11px] font-mono text-[#991B1B] block uppercase font-bold">Wrong</span>
+            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#991B1B] mt-1 block">
               {result.wrong}
             </span>
-            <span className="text-[11px] text-[#78716C] mt-1 block font-mono">Needs revision</span>
+            <span className="text-[11px] text-[#718096] mt-1 block font-mono">Needs revision</span>
           </div>
 
           <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#78716C] block uppercase">Unanswered</span>
-            <span className="text-2xl sm:text-3xl font-serif text-[#78716C] mt-1 block">
+            <span className="text-[11px] font-mono text-[#718096] block uppercase font-bold">Unanswered</span>
+            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#4A5568] mt-1 block">
               {result.unanswered}
             </span>
-            <span className="text-[11px] text-[#78716C] mt-1 block font-mono">Skipped</span>
+            <span className="text-[11px] text-[#718096] mt-1 block font-mono">0 penalty</span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA] col-span-2 md:col-span-1">
-            <span className="text-[11px] font-mono text-[#CC785C] block uppercase">Accuracy</span>
-            <span className="text-2xl sm:text-3xl font-serif text-[#191919] mt-1 block">
-              {result.accuracy.toFixed(1)}%
+          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
+            <span className="text-[11px] font-mono text-[#C05621] block uppercase font-bold">Withdrawn</span>
+            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#C05621] mt-1 block">
+              {result.withdrawnCount !== undefined ? result.withdrawnCount : withdrawnQuestions.length}
             </span>
-            <span className="text-[11px] text-[#78716C] mt-1 block font-mono">On attempted</span>
+            <span className="text-[11px] text-[#718096] mt-1 block font-mono">By BCI (Not scored)</span>
           </div>
         </div>
 
-        {/* Action to Practice Mistakes if any */}
-        {result.wrong > 0 && onPracticeMistakes && (
-          <div className="mt-6 p-4 rounded-xl bg-[#FBF4F0] border border-[#F0D5C9] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        {/* Section 5 Withdrawn Explanation Callout if applicable */}
+        {(result.withdrawnCount || withdrawnQuestions.length > 0) && (
+          <div className="mt-4 p-3.5 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl flex items-start gap-2.5 text-xs text-[#B45309]">
+            <Info className="w-4 h-4 shrink-0 mt-0.5 text-[#B45309]" />
             <div>
-              <h4 className="text-xs font-semibold text-[#8B3E2F]">
-                {result.wrong} question{result.wrong > 1 ? 's' : ''} to review
-              </h4>
-              <p className="text-xs text-[#8A5B4C] mt-0.5">
-                Targeted practice helps commit statutory provisions to long-term memory.
+              <strong>Official BCI Withdrawn Scoring Rule Applied:</strong>
+              <p className="mt-0.5 font-serif text-[#78350F]">
+                Per official Bar Council of India guidelines, withdrawn questions are cancelled from evaluation. The qualifying score threshold is computed strictly from the <strong>{scorableQuestions.length} scorable questions</strong>. Withdrawn questions are neither marked wrong nor counted as unanswered.
               </p>
             </div>
-            <button
-              onClick={onPracticeMistakes}
-              className="px-3.5 py-1.5 bg-[#CC785C] hover:bg-[#B66347] text-white text-xs font-medium rounded-lg shadow-xs flex items-center gap-1.5 transition-colors shrink-0"
-            >
-              <span>Practice Missed Questions</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
           </div>
         )}
       </div>
 
-      {/* Answer Review Section adhering strictly to Section 14 */}
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* Review Section */}
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-serif font-medium text-[#191919]">Answer Review</h2>
-            <p className="text-xs text-[#78716C] font-mono">
-              Verified legal basis and judgments without generative speculation.
+            <h2 className="text-xl font-serif font-bold text-[#1A365D]">Detailed Question Review</h2>
+            <p className="text-xs text-[#718096] mt-0.5 font-mono">
+              Showing {filteredQuestions.length} of {questions.length} questions
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* View Mode Toggle */}
+          {/* Filter Pills & View Toggles */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 bg-[#FAF8F5] p-1 rounded-xl border border-[#E8E2DA] text-xs">
+              {(['all', 'correct', 'wrong', 'unanswered', 'withdrawn', 'marked'] as ReviewFilter[]).map(tab => {
+                const count = questions.filter(q => {
+                  const isWithdrawn = q.status === "withdrawn" || q.scorable === false;
+                  if (tab === "withdrawn") return isWithdrawn;
+                  const selected = answers[q.id];
+                  const isCorrect = ExamEngine.isAnswerCorrect(selected, q.correctAnswer);
+                  const isUnanswered = !selected || (Array.isArray(selected) && selected.length === 0);
+                  const isMarked = marked.includes(q.id);
+
+                  if (tab === "correct") return !isWithdrawn && isCorrect;
+                  if (tab === "wrong") return !isWithdrawn && !isCorrect && !isUnanswered;
+                  if (tab === "unanswered") return !isWithdrawn && isUnanswered;
+                  if (tab === "marked") return isMarked;
+                  return true;
+                }).length;
+
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setFilter(tab)}
+                    className={`px-3 py-1.5 rounded-lg capitalize font-mono text-[11px] transition-colors ${
+                      filter === tab
+                        ? 'bg-[#1A365D] text-white font-bold shadow-xs'
+                        : 'text-[#4A5568] hover:bg-white'
+                    }`}
+                  >
+                    {tab} ({count})
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* View Mode Toggle: Card vs List */}
             <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-[#E8E2DA]">
               <button
                 onClick={() => setViewMode('card')}
-                className={`p-1.5 rounded-md text-xs flex items-center gap-1 transition-colors ${
-                  viewMode === 'card'
-                    ? 'bg-[#2A2825] text-white shadow-2xs'
-                    : 'text-[#5C5852] hover:text-[#191919]'
-                }`}
+                className={`p-1.5 rounded ${viewMode === 'card' ? 'bg-[#1A365D] text-white' : 'text-[#718096]'}`}
                 title="Card View"
               >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span className="font-mono text-[11px] hidden sm:inline">Cards</span>
+                <LayoutGrid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-1.5 rounded-md text-xs flex items-center gap-1 transition-colors ${
-                  viewMode === 'list'
-                    ? 'bg-[#2A2825] text-white shadow-2xs'
-                    : 'text-[#5C5852] hover:text-[#191919]'
-                }`}
+                className={`p-1.5 rounded ${viewMode === 'list' ? 'bg-[#1A365D] text-white' : 'text-[#718096]'}`}
                 title="List View"
               >
-                <List className="w-3.5 h-3.5" />
-                <span className="font-mono text-[11px] hidden sm:inline">List</span>
+                <List className="w-4 h-4" />
               </button>
-            </div>
-
-            {/* Filter Bar */}
-            <div className="flex flex-wrap items-center gap-1 bg-white p-1 rounded-lg border border-[#E8E2DA]">
-              {(
-                [
-                  { id: "all", label: `All (${questions.length})` },
-                  { id: "wrong", label: `Wrong (${result.wrong})` },
-                  { id: "correct", label: `Correct (${result.correct})` },
-                  { id: "unanswered", label: `Unanswered (${result.unanswered})` },
-                  { id: "marked", label: `Marked (${marked.length})` }
-                ] as const
-              ).map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setFilter(tab.id)}
-                  className={`px-2 py-1 rounded text-xs transition-colors ${
-                    filter === tab.id
-                      ? 'bg-[#2A2825] text-white font-medium'
-                      : 'text-[#5C5852] hover:text-[#191919] hover:bg-[#F4EFEA]'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
             </div>
           </div>
         </div>
 
-        {/* Question Review Cards vs List View */}
+        {/* Practice Mistakes Callout */}
+        {result.wrong > 0 && onPracticeMistakes && (
+          <div className="p-4 bg-[#FFF5F5] border border-[#FEB2B2] rounded-xl flex items-center justify-between">
+            <div className="text-xs text-[#9B2C2C] font-serif">
+              You have <strong>{result.wrong} incorrect questions</strong> in this session. Reviewing them reinforces critical statutory sections.
+            </div>
+            <button
+              onClick={onPracticeMistakes}
+              className="px-3.5 py-1.5 bg-[#C53030] hover:bg-[#9B2C2C] text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shrink-0 shadow-xs"
+            >
+              <span>Practice Mistakes</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* QUESTIONS DISPLAY */}
         {viewMode === 'card' ? (
           <div className="space-y-4">
-            {filteredQuestions.map((q) => {
+            {filteredQuestions.map((q, idx) => {
+              const isWithdrawn = q.status === "withdrawn" || q.scorable === false;
               const userChoice = answers[q.id] || null;
-              const isCorrect = userChoice === q.correctAnswer;
-              const isUnanswered = !userChoice;
+              const isCorrect = ExamEngine.isAnswerCorrect(userChoice, q.correctAnswer);
+              const isUnanswered = !userChoice || (Array.isArray(userChoice) && userChoice.length === 0);
               const isMarked = marked.includes(q.id);
 
               return (
-                <div 
+                <div
                   key={q.id}
-                  className="bg-white rounded-xl border border-[#E8E2DA] p-6 space-y-4 shadow-[0_1px_4px_rgba(0,0,0,0.02)]"
+                  className="bg-white rounded-xl border border-[#E8E2DA] p-6 shadow-[0_1px_4px_rgba(0,0,0,0.02)] space-y-4"
                 >
-                  {/* Header status */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#F0ECE6] text-xs">
+                  <div className="flex items-center justify-between text-xs pb-3 border-b border-[#F0ECE6]">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[11px] text-[#78716C] uppercase">
-                        Question {questions.findIndex(item => item.id === q.id) + 1}
+                      <span className="font-mono font-bold text-[#1A365D] bg-[#FAF8F5] px-2 py-0.5 rounded border border-[#E8E2DA]">
+                        Q{questions.findIndex(item => item.id === q.id) + 1}
                       </span>
-                      <span className="text-[#D5CDC2]">•</span>
-                      <span className="text-[#78716C] text-xs">{q.examName} ({q.year})</span>
-                      {isMarked && (
-                        <span className="flex items-center gap-1 text-[#B66347] bg-[#FBF4F0] px-2 py-0.5 rounded border border-[#F0D5C9] text-[11px]">
-                          <Flag className="w-2.5 h-2.5 fill-[#CC785C]" />
-                          <span>Marked</span>
-                        </span>
-                      )}
+                      <span className="font-serif text-[#4A5568]">{q.subjectName}</span>
                     </div>
 
-                    <div>
-                      {isUnanswered ? (
-                        <span className="flex items-center gap-1 text-[#78716C] bg-[#F4EFEA] px-2.5 py-0.5 rounded-full text-xs font-mono">
-                          <HelpCircle className="w-3 h-3" />
-                          <span>Unanswered</span>
+                    <div className="flex items-center gap-2">
+                      {isMarked && (
+                        <span className="flex items-center gap-1 text-[11px] font-mono text-[#B45309] bg-[#FFFBEB] px-2 py-0.5 rounded border border-[#FDE68A]">
+                          <Flag className="w-3 h-3" />
+                          Marked
+                        </span>
+                      )}
+
+                      {isWithdrawn ? (
+                        <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-[#991B1B] bg-[#FEF2F2] px-2 py-0.5 rounded border border-[#FECACA]">
+                          <ShieldAlert className="w-3 h-3" />
+                          Withdrawn by BCI
+                        </span>
+                      ) : isUnanswered ? (
+                        <span className="text-[11px] font-mono text-[#718096] bg-[#FAF8F5] px-2 py-0.5 rounded border border-[#E8E2DA]">
+                          Unanswered
                         </span>
                       ) : isCorrect ? (
-                        <span className="flex items-center gap-1 text-[#3F6212] bg-[#F7FEE7] px-2.5 py-0.5 rounded-full border border-[#D9F99D] text-xs font-mono">
-                          <Check className="w-3 h-3 text-[#65A30D]" />
-                          <span>Correct</span>
+                        <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-[#166534] bg-[#F0FDF4] px-2 py-0.5 rounded border border-[#BBF7D0]">
+                          <Check className="w-3 h-3" />
+                          Correct
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 text-[#991B1B] bg-[#FEF2F2] px-2.5 py-0.5 rounded-full border border-[#FECACA] text-xs font-mono">
-                          <X className="w-3 h-3 text-[#DC2626]" />
-                          <span>Incorrect</span>
+                        <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-[#991B1B] bg-[#FEF2F2] px-2 py-0.5 rounded border border-[#FECACA]">
+                          <X className="w-3 h-3" />
+                          Incorrect
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Question */}
-                  <p className="text-base text-[#191919] font-serif leading-relaxed">
+                  <h3 className="font-serif font-bold text-base text-[#1A365D] leading-relaxed">
                     {q.question}
-                  </p>
+                  </h3>
 
-                  {/* Option comparison */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
-                    {(['A', 'B', 'C', 'D'] as const).map(optKey => {
-                      const isOfficialCorrect = q.correctAnswer === optKey;
-                      const isSelectedByUser = userChoice === optKey;
+                  {/* Options */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                    {(['A', 'B', 'C', 'D'] as const).map(key => {
+                      const optText = q.options[key];
+                      if (!optText) return null;
 
-                      let optCardClass = "p-3 rounded-lg border flex items-start gap-2.5 ";
-                      if (isOfficialCorrect) {
-                        optCardClass += "bg-[#F7FEE7] border-[#A3E635] text-[#14532D] font-medium";
-                      } else if (isSelectedByUser && !isOfficialCorrect) {
-                        optCardClass += "bg-[#FEF2F2] border-[#FCA5A5] text-[#7F1D1D] line-through";
-                      } else {
-                        optCardClass += "bg-[#FAF8F5] border-[#E8E2DA] text-[#5C5852]";
+                      const isSelected = Array.isArray(userChoice) ? userChoice.includes(key) : userChoice === key;
+                      const isOfficialCorrect = Array.isArray(q.correctAnswer) ? q.correctAnswer.includes(key) : q.correctAnswer === key;
+
+                      let borderClass = "border-[#E8E2DA] bg-[#FAF8F5]";
+                      let badgeClass = "bg-white text-[#718096] border border-[#E8E2DA]";
+
+                      if (!isWithdrawn) {
+                        if (isOfficialCorrect) {
+                          borderClass = "border-[#BBF7D0] bg-[#F0FDF4]";
+                          badgeClass = "bg-[#22543D] text-white";
+                        } else if (isSelected && !isOfficialCorrect) {
+                          borderClass = "border-[#FECACA] bg-[#FEF2F2]";
+                          badgeClass = "bg-[#991B1B] text-white";
+                        }
                       }
 
                       return (
-                        <div key={optKey} className={optCardClass}>
-                          <span className={`w-5 h-5 rounded flex items-center justify-center text-[11px] font-mono shrink-0 ${
-                            isOfficialCorrect 
-                              ? 'bg-[#4D7C0F] text-white font-bold' 
-                              : isSelectedByUser 
-                              ? 'bg-[#DC2626] text-white' 
-                              : 'bg-[#E8E2DA] text-[#5C5852]'
-                          }`}>
-                            {optKey}
+                        <div
+                          key={key}
+                          className={`flex items-start gap-2.5 p-3 rounded-lg border text-xs ${borderClass}`}
+                        >
+                          <span className={`inline-flex w-5 h-5 rounded items-center justify-center font-mono font-bold text-[11px] shrink-0 ${badgeClass}`}>
+                            {key}
                           </span>
-                          <span className="leading-relaxed">
-                            {q.options[optKey]}
-                          </span>
+                          <span className="font-serif text-[#2D3748] pt-0.5 leading-snug">{optText}</span>
                         </div>
                       );
                     })}
                   </div>
 
-                  {/* Verified Metadata / Legal Basis */}
+                  {/* Legal Basis / Rationale */}
                   {(q.explanation || q.legalProvision || q.caseLaw) && (
                     <div className="p-3.5 rounded-lg bg-[#FAF8F5] border border-[#E8E2DA] space-y-1.5 text-xs font-serif">
                       {q.legalProvision && (
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-[11px] text-[#78716C] uppercase shrink-0">Statute:</span>
-                          <span className="text-[#191919] font-mono">{q.legalProvision}</span>
+                          <span className="font-mono text-[11px] text-[#718096] uppercase shrink-0 font-bold">Statute:</span>
+                          <span className="text-[#1A365D] font-mono font-medium">{q.legalProvision}</span>
                         </div>
                       )}
                       {q.caseLaw && (
                         <div className="flex items-baseline gap-2">
-                          <span className="font-mono text-[11px] text-[#78716C] uppercase shrink-0">Precedent:</span>
-                          <span className="text-[#191919] italic font-serif">{q.caseLaw}</span>
+                          <span className="font-mono text-[11px] text-[#718096] uppercase shrink-0 font-bold">Precedent:</span>
+                          <span className="text-[#1A365D] italic">{q.caseLaw}</span>
                         </div>
                       )}
                       {q.explanation && (
                         <div className="pt-1.5 border-t border-[#E8E2DA]">
-                          <span className="font-mono text-[11px] text-[#78716C] uppercase block mb-0.5">Rationale:</span>
-                          <p className="text-[#5C5852] leading-relaxed font-serif">{q.explanation}</p>
+                          <span className="font-mono text-[11px] text-[#718096] uppercase block mb-0.5 font-bold">Rationale:</span>
+                          <p className="text-[#4A5568] leading-relaxed">{q.explanation}</p>
                         </div>
                       )}
                     </div>
@@ -341,8 +368,8 @@ export const ResultView: React.FC<ResultViewProps> = ({
           /* LIST VIEW */
           <div className="bg-white rounded-xl border border-[#E8E2DA] overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-[#5C5852]">
-                <thead className="bg-[#FAF8F5] text-[#2A2825] font-medium border-b border-[#E8E2DA]">
+              <table className="w-full text-left text-xs text-[#4A5568]">
+                <thead className="bg-[#FAF8F5] text-[#1A365D] font-mono uppercase text-[11px] border-b border-[#E8E2DA]">
                   <tr>
                     <th className="px-4 py-3">#</th>
                     <th className="px-4 py-3">Question Prompt</th>
@@ -353,39 +380,46 @@ export const ResultView: React.FC<ResultViewProps> = ({
                 </thead>
                 <tbody className="divide-y divide-[#F0ECE6]">
                   {filteredQuestions.map(q => {
+                    const isWithdrawn = q.status === "withdrawn" || q.scorable === false;
                     const userChoice = answers[q.id] || null;
-                    const isCorrect = userChoice === q.correctAnswer;
-                    const isUnanswered = !userChoice;
+                    const isCorrect = ExamEngine.isAnswerCorrect(userChoice, q.correctAnswer);
+                    const isUnanswered = !userChoice || (Array.isArray(userChoice) && userChoice.length === 0);
 
                     return (
                       <tr key={q.id} className="hover:bg-[#FAF8F5] transition-colors">
-                        <td className="px-4 py-3 font-mono text-[11px] text-[#78716C]">
+                        <td className="px-4 py-3 font-mono text-[11px] text-[#718096]">
                           {questions.findIndex(item => item.id === q.id) + 1}
                         </td>
-                        <td className="px-4 py-3 font-serif font-medium text-sm text-[#191919] max-w-lg">
+                        <td className="px-4 py-3 font-serif font-bold text-sm text-[#1A365D] max-w-lg">
                           <p className="line-clamp-2">{q.question}</p>
                         </td>
                         <td className="px-4 py-3 text-center font-mono">
-                          <span className={`inline-flex w-6 h-6 items-center justify-center rounded text-xs font-bold ${
+                          <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${
                             !userChoice 
-                              ? 'bg-[#F4EFEA] text-[#78716C]' 
+                              ? 'bg-[#FAF8F5] text-[#718096]' 
                               : isCorrect 
-                              ? 'bg-[#F7FEE7] text-[#3F6212] border border-[#D9F99D]' 
+                              ? 'bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0]' 
                               : 'bg-[#FEF2F2] text-[#991B1B] border border-[#FECACA]'
                           }`}>
-                            {userChoice || '-'}
+                            {formatAnswerDisplay(userChoice)}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-center font-mono font-bold text-xs text-[#3F6212]">
-                          <span className="inline-flex w-6 h-6 items-center justify-center rounded bg-[#F7FEE7] border border-[#D9F99D]">
-                            {q.correctAnswer}
-                          </span>
+                        <td className="px-4 py-3 text-center font-mono font-bold text-xs text-[#166534]">
+                          {isWithdrawn ? (
+                            <span className="text-[#991B1B] text-[10px] uppercase font-mono">Withdrawn</span>
+                          ) : (
+                            <span className="inline-flex px-2 py-0.5 rounded bg-[#F0FDF4] border border-[#BBF7D0]">
+                              {formatAnswerDisplay(q.correctAnswer)}
+                            </span>
+                          )}
                         </td>
                         <td className="px-4 py-3">
-                          {isUnanswered ? (
-                            <span className="text-[#78716C] font-mono text-[11px]">Unanswered</span>
+                          {isWithdrawn ? (
+                            <span className="text-[#991B1B] font-mono text-[11px] font-bold">Withdrawn</span>
+                          ) : isUnanswered ? (
+                            <span className="text-[#718096] font-mono text-[11px]">Unanswered</span>
                           ) : isCorrect ? (
-                            <span className="text-[#3F6212] font-mono text-[11px] font-semibold">Correct ✓</span>
+                            <span className="text-[#166534] font-mono text-[11px] font-semibold">Correct ✓</span>
                           ) : (
                             <span className="text-[#991B1B] font-mono text-[11px] font-semibold">Wrong ✗</span>
                           )}

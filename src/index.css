@@ -3,38 +3,81 @@
 @layer base {
   :root {
     --font-serif: 'Newsreader', Georgia, Cambria, 'Times New Roman', Times, serif;
-    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-    /* Anthropic Signature Colors */
-    --anthropic-bg: #FAF8F5;
-    --anthropic-card: #FFFFFF;
-    --anthropic-card-warm: #F4EFEA;
-    --anthropic-border: #E8E2DA;
-    --anthropic-border-subtle: #F0ECE6;
-    --anthropic-text-primary: #191919;
-    --anthropic-text-secondary: #5C5852;
-    --anthropic-text-muted: #8E887F;
-    --anthropic-terracotta: #CC785C;
-    --anthropic-terracotta-dark: #B66347;
-    --anthropic-terracotta-light: #FBF4F0;
-    --anthropic-stone-dark: #2A2825;
+    /* Google Material-Inspired Indian Legal Theme Tokens */
+    --md-surface-ground: #F9F9FB; /* Warm neutral background */
+    --md-surface: #FFFFFF;        /* Crisp card surface */
+    --md-surface-variant: #F1F3F7; /* Secondary surface */
+    --md-surface-container: #E9ECF2; /* Subtle elevation */
+    
+    /* Primary: Deep Legal Navy */
+    --md-primary: #1A365D;
+    --md-primary-container: #E6EDF8;
+    --md-on-primary-container: #0D2342;
+    --md-primary-dark: #0F233D;
+
+    /* Secondary: Professional Indian Legal Blue */
+    --md-secondary: #2B6CB0;
+    --md-secondary-container: #E2ECF7;
+
+    /* Accent: Muted Saffron / Amber Gold */
+    --md-accent: #C05621;
+    --md-accent-light: #FEEBC8;
+    --md-accent-gold: #D69E2E;
+
+    /* Supporting: Subtle Indian Green */
+    --md-success: #22543D;
+    --md-success-light: #C6F6D5;
+    --md-success-text: #276749;
+
+    /* Status Colors */
+    --md-error: #9B2C2C;
+    --md-error-light: #FED7D7;
+    --md-withdrawn: #4A5568;
+    --md-withdrawn-light: #EDF2F7;
+
+    /* Outlines & Dividers */
+    --md-outline: #E2E8F0;
+    --md-outline-variant: #CBD5E0;
+    --md-text-primary: #1A202C;
+    --md-text-secondary: #4A5568;
+    --md-text-muted: #718096;
   }
 
   body {
-    background-color: var(--anthropic-bg);
-    color: var(--anthropic-text-primary);
+    background-color: var(--md-surface-ground);
+    color: var(--md-text-primary);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-image: 
+      radial-gradient(#1A365D 0.5px, transparent 0.5px),
+      radial-gradient(#C05621 0.4px, #F9F9FB 0.4px);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    background-attachment: fixed;
   }
 
-  h1, h2, .font-serif-claude {
+  h1, h2, h3, .font-legal-heading {
     font-family: var(--font-serif);
+    letter-spacing: -0.015em;
   }
 }
 
-/* Custom scrollbars matching warm parchment style */
+/* Material elevation shadows */
+.mat-elevation-1 {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+}
+.mat-elevation-2 {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+}
+.mat-elevation-3 {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -45,10 +88,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E2DBD2;
-  border-radius: 4px;
+  background: #CBD5E0;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #C8BFB3;
+  background: #A0AEC0;
 }

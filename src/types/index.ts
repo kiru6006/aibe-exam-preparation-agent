@@ -1,5 +1,5 @@
 export type OptionKey = "A" | "B" | "C" | "D";
-export type Answer = OptionKey | null;
+export type Answer = OptionKey | OptionKey[] | null;
 
 export type QuestionType =
   | "mcq"
@@ -18,19 +18,22 @@ export interface Question {
     C: string;
     D: string;
   };
-  correctAnswer: OptionKey;
+  correctAnswer: OptionKey | OptionKey[] | null;
   subjectId: string;
+  subjectName?: string;
   topicId?: string;
   year: number;
   examId: string;
   examName: string;
   set?: string;
   questionNumber: number;
-  questionType?: QuestionType;
+  questionType?: string;
   explanation?: string;
   legalProvision?: string;
   caseLaw?: string;
   verified: boolean;
+  status?: "active" | "withdrawn";
+  scorable?: boolean;
   source?: {
     exam: string;
     year: number;
@@ -44,6 +47,9 @@ export interface Subject {
   name: string;
   shortName?: string;
   weightageQuestions: number; // Standard AIBE official weightage
+  officialWeightage?: number; // Alias for convenience
+  questionCount?: number;     // Runtime or bank count
+  priority?: "Critical" | "High" | "Medium";
   description?: string;
   topics?: {
     id: string;
@@ -59,6 +65,8 @@ export interface Exam {
   questionIds: string[];
   durationMinutes?: number;
   totalQuestions: number;
+  scorableQuestions?: number;
+  withdrawnQuestions?: number;
   marksPerQuestion?: number;
   negativeMarking?: boolean;
   passPercentage?: number;
@@ -78,8 +86,11 @@ export interface Attempt {
   durationSeconds?: number;
   score?: number;
   totalQuestions: number;
+  scorableQuestions?: number;
+  withdrawnQuestions?: number;
   examId?: string;
   subjectId?: string;
+  result?: ExamResult;
 }
 
 export interface QuestionPerformance {
@@ -92,6 +103,9 @@ export interface QuestionPerformance {
 
 export interface ExamResult {
   total: number;
+  scorableTotal: number;
+  withdrawn: number;
+  withdrawnCount?: number;
   attempted: number;
   correct: number;
   wrong: number;
@@ -100,4 +114,38 @@ export interface ExamResult {
   accuracy: number;
   completionRate: number;
   passed?: boolean;
+}
+
+export interface AibeStatistic {
+  exam: string;
+  examName?: string;
+  year: number;
+  examDate?: string;
+  resultDate?: string;
+  registered: number | null | string;
+  appeared: number | null | string;
+  cleared: number | null | string;
+  passed?: number | null | string;
+  passPercentage: number | null;
+  withdrawnQuestions?: number;
+  scorableQuestions?: number;
+  source: string;
+  sourceUrl?: string;
+  sourceNote?: string;
+  verified: boolean;
+  notes?: string;
+}
+
+export interface StrategyItem {
+  id: string;
+  title: string;
+  priority: "Critical" | "High" | "Medium";
+  why: string;
+  action: string[];
+}
+
+export interface SyllabusItem {
+  subject: string;
+  questions: number;
+  priority: "Critical" | "High" | "Medium";
 }

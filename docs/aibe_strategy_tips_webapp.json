@@ -1,0 +1,264 @@
+{
+  "schemaVersion": "2.0.0",
+  "title": "AIBE Strategy, Tips & Tricks",
+  "description": "Action-oriented preparation guidance derived from the supplied previous-paper analysis material and the question bank. This is a study aid, not an official BCI instruction.",
+  "sourceBasis": [
+    "Supplied Paperathon material: previous papers are better analysed subject-wise rather than only year-wise; link related provisions/concepts while solving MCQs.",
+    "Supplied Paperathon material: use subject-wise weightage analysis to prioritize preparation.",
+    "Current AIBE XXI paper analysis: the paper is organized across major civil, criminal, minor, technical and other law areas, with explicit question distribution.",
+    "Current AIBE XXII syllabus supplied by the user: 19 subject groups and 100 total questions."
+  ],
+  "strategies": [
+    {
+      "id": "S01",
+      "title": "Study by subject, not only by year",
+      "priority": "Critical",
+      "why": "Year-wise papers show what was asked. Subject-wise analysis shows where repeated testing and weightage concentrate.",
+      "action": [
+        "Build subject-wise practice sets from the common question bank.",
+        "After every mock, move wrong answers into the relevant subject/topic queue.",
+        "Use full previous papers only after targeted subject practice."
+      ]
+    },
+    {
+      "id": "S02",
+      "title": "Link provisions while solving",
+      "priority": "High",
+      "why": "The supplied Paperathon approach recommends connecting the tested provision with related provisions and concepts.",
+      "action": [
+        "When a question tests one section, note two or three closely related provisions.",
+        "Group similar doctrines, exceptions and procedural rules.",
+        "Turn each wrong answer into a small linked-law note."
+      ]
+    },
+    {
+      "id": "S03",
+      "title": "Use weightage to allocate time",
+      "priority": "Critical",
+      "why": "The supplied analysis material contains exam-wise subject weightage tables.",
+      "action": [
+        "Prioritize high-frequency subjects first.",
+        "Give smaller subjects shorter but repeated revision cycles.",
+        "Do not ignore low-weight subjects because they can still provide easy marks."
+      ]
+    },
+    {
+      "id": "S04",
+      "title": "Separate learning from testing",
+      "priority": "High",
+      "why": "Solving papers alone can hide knowledge gaps.",
+      "action": [
+        "Learn a topic first.",
+        "Do 20-30 topic MCQs.",
+        "Review every wrong and guessed answer.",
+        "Then attempt a timed mixed set."
+      ]
+    },
+    {
+      "id": "S05",
+      "title": "Recent-law revision",
+      "priority": "Critical",
+      "why": "Recent papers contain newer statutory frameworks such as BNS, BNSS and BSA.",
+      "action": [
+        "Give special revision time to newly applicable legislation.",
+        "Compare old and new provisions where the question bank contains both.",
+        "Practice questions that test transition, definitions, sections and procedural changes."
+      ]
+    },
+    {
+      "id": "S06",
+      "title": "Use the 3-hour mock deliberately",
+      "priority": "High",
+      "why": "The supplied AIBE XXI paper states 100 questions, 1 mark each, no negative marking and 3 hours.",
+      "action": [
+        "Run full 100-question mocks under the same time limit.",
+        "Use a first-pass strategy for confident questions.",
+        "Flag uncertain questions and return later.",
+        "Reserve a final review window for unanswered questions."
+      ]
+    },
+    {
+      "id": "S07",
+      "title": "Exploit no-negative-marking",
+      "priority": "High",
+      "why": "For the supplied AIBE XXI paper, there is no negative marking.",
+      "action": [
+        "Never leave a question unanswered in the final submission.",
+        "First eliminate clearly wrong options.",
+        "If uncertain, make the best-supported choice before time expires."
+      ]
+    },
+    {
+      "id": "S08",
+      "title": "Build a mistake-driven revision loop",
+      "priority": "Critical",
+      "why": "The most useful personal signal is what the student repeatedly gets wrong.",
+      "action": [
+        "Store wrong, skipped and guessed questions locally.",
+        "Create a Practice My Mistakes mode.",
+        "Repeat until the same concept is consistently answered correctly."
+      ]
+    },
+    {
+      "id": "S09",
+      "title": "Use question-type patterns",
+      "priority": "Medium",
+      "why": "The supplied papers include direct MCQs, assertion-reason, statement/conclusion and scenario-based questions.",
+      "action": [
+        "Practice each question type separately.",
+        "For assertion-reason questions, judge A and R independently before checking the relationship.",
+        "For statement questions, evaluate each statement before selecting the combined option."
+      ]
+    },
+    {
+      "id": "S10",
+      "title": "Final-week execution",
+      "priority": "Critical",
+      "why": "At the end, additional broad reading often gives less return than targeted correction.",
+      "action": [
+        "Stop expanding the syllabus.",
+        "Run mixed timed sets.",
+        "Revise mistakes, high-frequency provisions and recent-law changes.",
+        "Complete at least one full mock under exam conditions."
+      ]
+    }
+  ],
+  "appScreens": [
+    {
+      "id": "strategy-home",
+      "name": "Strategy & Tips",
+      "sections": [
+        "How to Prepare",
+        "Subject Priority",
+        "Question Types",
+        "Exam-Day Strategy",
+        "Mistake Loop"
+      ]
+    },
+    {
+      "id": "subject-priority",
+      "name": "Subject Priority",
+      "behavior": "Show priority based on configured syllabus/question distribution, but label historical frequency as historical evidence rather than a prediction."
+    },
+    {
+      "id": "mistake-loop",
+      "name": "Practice My Mistakes",
+      "behavior": "Link directly to questions the student got wrong, skipped or repeatedly guessed."
+    }
+  ],
+  "guardrails": [
+    "Do not claim that past frequency guarantees future questions.",
+    "Do not present third-party preparation advice as official BCI rules.",
+    "Do not reproduce the supplied publisher text verbatim.",
+    "Keep source-derived observations separate from app-generated recommendations."
+  ],
+  "currentSyllabus": [
+    {
+      "subject": "Constitutional Law",
+      "questions": 10,
+      "priority": "Critical"
+    },
+    {
+      "subject": "IPC (Indian Penal Code) & BNS",
+      "questions": 8,
+      "priority": "Critical"
+    },
+    {
+      "subject": "CrPC & BNSS",
+      "questions": 10,
+      "priority": "Critical"
+    },
+    {
+      "subject": "CPC",
+      "questions": 10,
+      "priority": "Critical"
+    },
+    {
+      "subject": "Evidence Act & BSA",
+      "questions": 8,
+      "priority": "Critical"
+    },
+    {
+      "subject": "Alternative Dispute Redressal including Arbitration",
+      "questions": 4,
+      "priority": "High"
+    },
+    {
+      "subject": "Family Law",
+      "questions": 8,
+      "priority": "Critical"
+    },
+    {
+      "subject": "Public Interest Litigation",
+      "questions": 4,
+      "priority": "High"
+    },
+    {
+      "subject": "Administration Law",
+      "questions": 3,
+      "priority": "Medium"
+    },
+    {
+      "subject": "Professional Ethics & Cases of Professional Misconduct under Bar Council of India Rules",
+      "questions": 4,
+      "priority": "High"
+    },
+    {
+      "subject": "Company Law",
+      "questions": 2,
+      "priority": "Medium"
+    },
+    {
+      "subject": "Environmental Law",
+      "questions": 2,
+      "priority": "Medium"
+    },
+    {
+      "subject": "Cyber Law",
+      "questions": 2,
+      "priority": "Medium"
+    },
+    {
+      "subject": "Labour & Industrial Law",
+      "questions": 4,
+      "priority": "High"
+    },
+    {
+      "subject": "Law of Tort, including Motor Vehicle Act and Consumer Protection Law",
+      "questions": 5,
+      "priority": "High"
+    },
+    {
+      "subject": "Law related to Taxation",
+      "questions": 4,
+      "priority": "High"
+    },
+    {
+      "subject": "Law of Contract, Specific Relief, Property Laws, Negotiable Instrument Act",
+      "questions": 8,
+      "priority": "Critical"
+    },
+    {
+      "subject": "Land Acquisition Act",
+      "questions": 2,
+      "priority": "Medium"
+    },
+    {
+      "subject": "Intellectual Property Laws",
+      "questions": 2,
+      "priority": "Medium"
+    }
+  ],
+  "sourceNotes": [
+    "The Paperathon material explicitly advocates analysing previous papers subject-wise rather than only year-wise and linking related provisions/concepts while solving MCQs.",
+    "The supplied AIBE XXI analysis table provides a concrete 100-question subject distribution across 25 law areas.",
+    "The supplied AIBE XXII syllabus image provides a 19-group, 100-question distribution that can be used as the current preparation taxonomy."
+  ],
+  "appContract": {
+    "sourceQuestionBank": "aibe_question_bank_webapp.json",
+    "linkBy": "examId + questionNumber / question id",
+    "behavior": "Strategy recommendations should route students into filtered practice sets and Practice My Mistakes.",
+    "historicalFrequencyWarning": "Historical frequency is evidence, not a guarantee of future questions."
+  },
+  "appReady": true
+}

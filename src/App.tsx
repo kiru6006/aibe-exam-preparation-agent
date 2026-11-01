@@ -20,11 +20,14 @@ import { SubjectsView } from './components/SubjectsView';
 import { MockTestView } from './components/MockTestView';
 import { PerformanceView } from './components/PerformanceView';
 import { QuestionBankSearchView } from './components/QuestionBankSearchView';
+import { StrategyTipsView } from './components/StrategyTipsView';
+import { AboutView } from './components/AboutView';
 import { ExamView } from './components/ExamView';
 import { ResultView } from './components/ResultView';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
+  const [strategySubTab, setStrategySubTab] = useState<string>('how-to-prepare');
   const [activeSession, setActiveSession] = useState<Attempt | null>(null);
   const [completedResult, setCompletedResult] = useState<{
     attempt: Attempt;
@@ -42,15 +45,41 @@ export function App() {
   const mistakesList = StorageService.getMistakeQuestionIds();
 
   // Navigation Handler
-  const handleSelectTab = (tab: string) => {
+  const handleSelectTab = (tab: string, subTab?: string) => {
     if (activeSession) {
       if (window.confirm("You have an active exam session. Leave this session? Progress will be saved.")) {
         StorageService.saveActiveSession(activeSession);
         setActiveSession(null);
-        setCurrentTab(tab);
+        routeToTab(tab, subTab);
       }
     } else {
       setCompletedResult(null);
+      routeToTab(tab, subTab);
+    }
+  };
+
+  const routeToTab = (tab: string, subTab?: string) => {
+    if (tab === 'strategy' || tab === 'strategy-overview') {
+      setCurrentTab('strategy');
+      setStrategySubTab(subTab || 'how-to-prepare');
+    } else if (tab === 'strategy-priority') {
+      setCurrentTab('strategy');
+      setStrategySubTab('subject-priority');
+    } else if (tab === 'strategy-repeats') {
+      setCurrentTab('strategy');
+      setStrategySubTab('what-repeats');
+    } else if (tab === 'strategy-question-types') {
+      setCurrentTab('strategy');
+      setStrategySubTab('question-types');
+    } else if (tab === 'strategy-exam-day') {
+      setCurrentTab('strategy');
+      setStrategySubTab('exam-day');
+    } else if (tab === 'strategy-plans') {
+      setCurrentTab('strategy');
+      setStrategySubTab('plans');
+    } else if (tab === 'mistakes') {
+      handlePracticeMistakes();
+    } else {
       setCurrentTab(tab);
     }
   };
@@ -118,7 +147,7 @@ export function App() {
       answers: {},
       markedForReview: [],
       startedAt: new Date().toISOString(),
-      durationSeconds: count === 25 ? 30 * 60 : count === 50 ? 60 * 60 : 210 * 60,
+      durationSeconds: count === 25 ? 30 * 60 : count === 50 ? 60 * 60 : 180 * 60,
       totalQuestions: questions.length
     };
 
@@ -151,18 +180,22 @@ export function App() {
     setCompletedResult(null);
   };
 
-  // Submit Exam Session
+  // Submit Active Session
   const handleSubmitSession = (answers: Record<string, Answer>, marked: string[]) => {
     if (!activeSession) return;
 
-    const result = ExamEngine.calculateResult(activeSession.questionIds, answers, 45);
+    // Use calculateResult with Section 5 withdrawn logic
+    const result = ExamEngine.calculateResult(activeSession.questionIds, answers);
 
     const completed: Attempt = {
       ...activeSession,
       answers,
       markedForReview: marked,
       completedAt: new Date().toISOString(),
-      score: result.score
+      score: result.score,
+      scorableQuestions: result.scorableTotal,
+      withdrawnQuestions: result.withdrawn,
+      result
     };
 
     // Save to persistent local history
@@ -171,10 +204,12 @@ export function App() {
 
     // Record question performance outcomes for mastery and mistake tracking
     const questions = ExamEngine.getQuestionsByIds(activeSession.questionIds);
-    const outcomes = questions.map(q => ({
-      id: q.id,
-      correct: answers[q.id] === q.correctAnswer
-    }));
+    const outcomes = questions
+      .filter(q => q.status !== 'withdrawn' && q.scorable !== false)
+      .map(q => ({
+        id: q.id,
+        correct: ExamEngine.isAnswerCorrect(answers[q.id], q.correctAnswer)
+      }));
     StorageService.recordAnswerOutcomes(outcomes);
 
     // Set view to results
@@ -211,7 +246,7 @@ export function App() {
     const questions = ExamEngine.getQuestionsByIds(completedResult.attempt.questionIds);
 
     return (
-      <div className="min-h-screen bg-[#FAF8F5] text-[#191919] flex flex-col font-sans">
+      <div className="min-h-screen bg-[#FAF8F5] text-[#2D3748] flex flex-col font-sans">
         <Navbar 
           currentTab=""
           onSelectTab={handleSelectTab}
@@ -224,7 +259,6 @@ export function App() {
             answers={completedResult.attempt.answers}
             marked={completedResult.attempt.markedForReview}
             onRetry={() => {
-              // Re-run same questions
               const retryAttempt: Attempt = {
                 id: `retry-${Date.now()}`,
                 type: completedResult.attempt.type,
@@ -245,7 +279,10 @@ export function App() {
             }}
             onPracticeMistakes={() => {
               const wrongIds = questions
-                .filter(q => completedResult.attempt.answers[q.id] !== q.correctAnswer)
+                .filter(q => {
+                  const ans = completedResult.attempt.answers[q.id];
+                  return !ExamEngine.isAnswerCorrect(ans, q.correctAnswer);
+                })
                 .map(q => q.id);
               setCompletedResult(null);
               handlePracticeMistakes(wrongIds);
@@ -258,7 +295,7 @@ export function App() {
 
   // Render Standard Tabs
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#191919] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FAF8F5] text-[#2D3748] flex flex-col font-sans">
       <Navbar
         currentTab={currentTab}
         onSelectTab={handleSelectTab}
@@ -270,7 +307,7 @@ export function App() {
             subjects={OFFICIAL_SUBJECTS}
             exams={OFFICIAL_EXAMS}
             questions={QUESTIONS_BANK}
-            onNavigate={tab => setCurrentTab(tab)}
+            onNavigate={handleSelectTab}
             onStartExam={handleStartExam}
             onPracticeMistakes={() => handlePracticeMistakes()}
             mistakesCount={mistakesList.length}
@@ -301,6 +338,16 @@ export function App() {
           />
         )}
 
+        {currentTab === 'strategy' && (
+          <StrategyTipsView
+            initialTab={strategySubTab}
+            onPracticeSubject={handleStartSubjectPractice}
+            onPracticeMistakes={() => handlePracticeMistakes()}
+            onStartMock={handleStartMock}
+            mistakesCount={mistakesList.length}
+          />
+        )}
+
         {currentTab === 'performance' && (
           <PerformanceView
             subjects={OFFICIAL_SUBJECTS}
@@ -316,14 +363,22 @@ export function App() {
             subjects={OFFICIAL_SUBJECTS}
           />
         )}
+
+        {currentTab === 'about' && (
+          <AboutView />
+        )}
       </main>
 
-      <footer className="border-t border-[#E8E2DA] bg-[#FAF8F5] py-8 mt-16 text-center text-xs text-[#78716C]">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="font-serif">© {new Date().getFullYear()} AIBE Prep • Free Student Legal Study</p>
-          <p className="text-[11px] text-[#A8A29E] font-sans">
-            Bar Council of India Previous Year Exam Preparation Engine
-          </p>
+      <footer className="border-t border-[#E8E2DA] bg-white py-10 mt-16 text-xs text-[#718096]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-serif font-bold text-sm text-[#1A365D]">AIBE Prep</span>
+            <span className="text-[#A0AEC0]">|</span>
+            <span>All India Bar Examination Legal Study Platform</span>
+          </div>
+          <div className="text-[11px] text-[#A0AEC0] font-mono">
+            18 BCI Exams • 1,800 Questions • 19 Syllabus Subjects
+          </div>
         </div>
       </footer>
     </div>

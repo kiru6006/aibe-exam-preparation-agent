@@ -1,0 +1,212 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedFor": "aibe_question_bank_webapp.json",
+  "checks": {
+    "examCount": true,
+    "totalQuestionCount": true,
+    "everyExamHas100Questions": true,
+    "everyQuestionHasABCDOptions": true,
+    "everyScorableQuestionHasCorrectAnswer": true,
+    "allPassed": true
+  },
+  "exams": {
+    "AIBE-4": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-5": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-6": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-7": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-8": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-9": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-10": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-11": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-12": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-13": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-14": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-15": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-16": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-17": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-18": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    },
+    "AIBE-19": {
+      "records": 100,
+      "active": 93,
+      "withdrawn": 7,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 93,
+      "passed": true
+    },
+    "AIBE-20": {
+      "records": 100,
+      "active": 95,
+      "withdrawn": 5,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 95,
+      "passed": true
+    },
+    "AIBE-21": {
+      "records": 100,
+      "active": 100,
+      "withdrawn": 0,
+      "missingQuestionNumbers": [],
+      "duplicateQuestionNumbers": [],
+      "questionsWithInvalidOptions": [],
+      "activeQuestionsMissingCorrectAnswer": [],
+      "answerableQuestions": 100,
+      "passed": true
+    }
+  }
+}
