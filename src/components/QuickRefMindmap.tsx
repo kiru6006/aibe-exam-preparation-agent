@@ -4,6 +4,8 @@ import type { MindNode } from '../types';
 
 interface QuickRefMindmapProps {
   root: MindNode;
+  onInspectCaseName?: (caseName: string) => void;
+  onInspectArticle?: (article: string) => void;
 }
 
 const CategoryBadge: React.FC<{ category: MindNode['category'] }> = ({ category }) => {
@@ -24,7 +26,12 @@ const CategoryBadge: React.FC<{ category: MindNode['category'] }> = ({ category 
   }
 };
 
-const MindmapNodeItem: React.FC<{ node: MindNode; depth: number }> = ({ node, depth }) => {
+const MindmapNodeItem: React.FC<{
+  node: MindNode;
+  depth: number;
+  onInspectCaseName?: (caseName: string) => void;
+  onInspectArticle?: (article: string) => void;
+}> = ({ node, depth, onInspectCaseName, onInspectArticle }) => {
   const [isOpen, setIsOpen] = useState(depth < 2);
   const hasChildren = node.children && node.children.length > 0;
 
@@ -65,17 +72,35 @@ const MindmapNodeItem: React.FC<{ node: MindNode; depth: number }> = ({ node, de
             )}
 
             {node.article && (
-              <div className="flex items-center gap-1.5 mt-1.5 text-xs text-[#1A365D] font-medium">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onInspectArticle) onInspectArticle(node.article!);
+                }}
+                className="flex items-center gap-1.5 mt-1.5 text-xs text-[#1A365D] hover:text-[#C05621] font-medium transition-colors text-left"
+              >
                 <BookOpen className="w-3.5 h-3.5 text-[#C05621]" />
-                <span>Ref: {node.article}</span>
-              </div>
+                <span className="underline decoration-dotted">Ref: {node.article}</span>
+              </button>
             )}
 
             {node.caseName && (
-              <div className="flex items-center gap-1.5 mt-1 text-xs text-purple-900 font-medium">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onInspectCaseName) onInspectCaseName(node.caseName!);
+                }}
+                className="flex items-center gap-1.5 mt-1 text-xs text-purple-900 hover:text-purple-700 font-medium transition-colors text-left"
+                title="Click for quick case popup"
+              >
                 <Scale className="w-3.5 h-3.5 text-purple-700" />
-                <span className="italic">{node.caseName}</span>
-              </div>
+                <span className="italic underline decoration-dotted">{node.caseName}</span>
+                <span className="text-[9px] bg-purple-100 text-purple-800 px-1 rounded ml-1 font-sans">
+                  Quick Info
+                </span>
+              </button>
             )}
 
             {node.trap && (
@@ -93,7 +118,13 @@ const MindmapNodeItem: React.FC<{ node: MindNode; depth: number }> = ({ node, de
         {hasChildren && (
           <div className="mt-2 space-y-2">
             {node.children!.map((child) => (
-              <MindmapNodeItem key={child.id} node={child} depth={depth + 1} />
+              <MindmapNodeItem
+                key={child.id}
+                node={child}
+                depth={depth + 1}
+                onInspectCaseName={onInspectCaseName}
+                onInspectArticle={onInspectArticle}
+              />
             ))}
           </div>
         )}
@@ -102,7 +133,11 @@ const MindmapNodeItem: React.FC<{ node: MindNode; depth: number }> = ({ node, de
   );
 };
 
-export const QuickRefMindmap: React.FC<QuickRefMindmapProps> = ({ root }) => {
+export const QuickRefMindmap: React.FC<QuickRefMindmapProps> = ({
+  root,
+  onInspectCaseName,
+  onInspectArticle,
+}) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between pb-2 border-b border-[#E8E2DA]">
@@ -118,7 +153,12 @@ export const QuickRefMindmap: React.FC<QuickRefMindmapProps> = ({ root }) => {
       </div>
 
       <div className="p-4 bg-[#FAF8F5] rounded-xl border border-[#E8E2DA]">
-        <MindmapNodeItem node={root} depth={0} />
+        <MindmapNodeItem
+          node={root}
+          depth={0}
+          onInspectCaseName={onInspectCaseName}
+          onInspectArticle={onInspectArticle}
+        />
       </div>
     </div>
   );

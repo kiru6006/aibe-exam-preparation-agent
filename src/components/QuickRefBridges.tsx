@@ -5,11 +5,13 @@ import type { QuickRefBridge } from '../types';
 interface QuickRefBridgesProps {
   bridges: QuickRefBridge[];
   onSelectSubject?: (subjectId: string) => void;
+  onInspectReference?: (referenceName: string) => void;
 }
 
 export const QuickRefBridges: React.FC<QuickRefBridgesProps> = ({
   bridges,
   onSelectSubject,
+  onInspectReference,
 }) => {
   return (
     <div className="space-y-4">
@@ -46,13 +48,16 @@ export const QuickRefBridges: React.FC<QuickRefBridgesProps> = ({
 
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {b.sharedArticlesOrCases.map((item, idx) => (
-                  <span
+                  <button
                     key={idx}
-                    className="text-[11px] font-medium bg-[#FAF8F5] text-slate-700 border border-[#E8E2DA] px-2 py-0.5 rounded flex items-center gap-1"
+                    type="button"
+                    onClick={() => onInspectReference && onInspectReference(item)}
+                    className="text-[11px] font-medium bg-[#FAF8F5] hover:bg-amber-100 hover:text-[#C05621] text-slate-700 border border-[#E8E2DA] px-2 py-0.5 rounded flex items-center gap-1 transition-colors text-left"
+                    title="Click for quick info popup"
                   >
                     <BookOpen className="w-3 h-3 text-[#C05621]" />
-                    {item}
-                  </span>
+                    <span>{item}</span>
+                  </button>
                 ))}
               </div>
             </div>

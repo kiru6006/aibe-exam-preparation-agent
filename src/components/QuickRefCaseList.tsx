@@ -6,12 +6,14 @@ interface QuickRefCaseListProps {
   cases: QuickRefCase[];
   onShowOnMap: (nodeId: string) => void;
   onPracticeTopic?: (caseName: string) => void;
+  onInspectCase?: (c: QuickRefCase) => void;
 }
 
 export const QuickRefCaseList: React.FC<QuickRefCaseListProps> = ({
   cases,
   onShowOnMap,
   onPracticeTopic,
+  onInspectCase,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -53,13 +55,19 @@ export const QuickRefCaseList: React.FC<QuickRefCaseListProps> = ({
           <div
             key={c.id}
             id={c.id}
-            className="bg-white rounded-xl border border-[#E8E2DA] p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+            onClick={() => onInspectCase && onInspectCase(c)}
+            className={`bg-white rounded-xl border border-[#E8E2DA] p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between ${
+              onInspectCase ? 'cursor-pointer hover:border-purple-300' : ''
+            }`}
           >
             <div>
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <h4 className="font-serif font-bold text-slate-900 text-base leading-snug">
-                    {c.name}
+                  <h4 className="font-serif font-bold text-slate-900 text-base leading-snug hover:text-purple-900 transition-colors flex items-center gap-1.5">
+                    <span>{c.name}</span>
+                    <span className="text-[10px] font-mono font-normal text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200">
+                      Quick Info
+                    </span>
                   </h4>
                   <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-slate-500">
                     <span className="font-mono text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded text-[11px]">
@@ -115,19 +123,38 @@ export const QuickRefCaseList: React.FC<QuickRefCaseListProps> = ({
             </div>
 
             <div className="mt-4 pt-3 border-t border-[#E8E2DA]/60 flex items-center justify-between gap-2">
-              {c.connectedNodeId && (
-                <button
-                  onClick={() => onShowOnMap(c.connectedNodeId!)}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#C05621] hover:text-[#9C4215] transition-colors py-1 px-2 rounded hover:bg-amber-50"
-                >
-                  <MapPin className="w-3.5 h-3.5" />
-                  Show on Map
-                </button>
-              )}
+              <div className="flex items-center gap-1.5">
+                {c.connectedNodeId && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onShowOnMap(c.connectedNodeId!);
+                    }}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#C05621] hover:text-[#9C4215] transition-colors py-1 px-2 rounded hover:bg-amber-50"
+                  >
+                    <MapPin className="w-3.5 h-3.5" />
+                    Show on Map
+                  </button>
+                )}
+                {onInspectCase && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onInspectCase(c);
+                    }}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-purple-700 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 py-1 px-2 rounded transition-colors"
+                  >
+                    Details
+                  </button>
+                )}
+              </div>
 
               {onPracticeTopic && (
                 <button
-                  onClick={() => onPracticeTopic(c.name)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onPracticeTopic(c.name);
+                  }}
                   className="inline-flex items-center gap-1 text-xs font-medium text-slate-700 hover:text-[#1A365D] bg-slate-100 hover:bg-slate-200 py-1 px-2.5 rounded transition-colors"
                 >
                   <Play className="w-3 h-3 text-[#1A365D]" />

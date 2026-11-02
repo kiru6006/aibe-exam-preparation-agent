@@ -6,11 +6,15 @@ interface QuickRefTop15Props {
   items: QuickRefTop15Item[];
   onShowOnMap: (nodeId: string) => void;
   onSelectConcept?: (conceptId: string) => void;
+  onInspectItem?: (item: QuickRefTop15Item) => void;
+  onInspectCaseName?: (caseName: string) => void;
 }
 
 export const QuickRefTop15: React.FC<QuickRefTop15Props> = ({
   items,
   onShowOnMap,
+  onInspectItem,
+  onInspectCaseName,
 }) => {
   return (
     <div className="space-y-4">
@@ -44,7 +48,11 @@ export const QuickRefTop15: React.FC<QuickRefTop15Props> = ({
                 </span>
               </div>
 
-              <h4 className="font-serif font-bold text-slate-900 text-sm mt-2 leading-snug">
+              <h4
+                onClick={() => onInspectItem && onInspectItem(item)}
+                className="font-serif font-bold text-slate-900 text-sm mt-2 leading-snug hover:text-[#C05621] cursor-pointer transition-colors"
+                title="Click for quick popup info"
+              >
                 {item.title}
               </h4>
 
@@ -54,16 +62,29 @@ export const QuickRefTop15: React.FC<QuickRefTop15Props> = ({
 
               <div className="mt-3 pt-2.5 border-t border-slate-100 space-y-1 text-xs">
                 {item.articleRef && (
-                  <div className="flex items-center gap-1.5 text-slate-700">
+                  <button
+                    onClick={() => onInspectItem && onInspectItem(item)}
+                    className="flex items-center gap-1.5 text-slate-700 hover:text-blue-700 transition-colors text-left"
+                  >
                     <BookOpen className="w-3 h-3 text-[#1A365D] shrink-0" />
-                    <span className="font-medium">{item.articleRef}</span>
-                  </div>
+                    <span className="font-medium underline decoration-dotted">{item.articleRef}</span>
+                  </button>
                 )}
                 {item.leadingCase && (
-                  <div className="flex items-center gap-1.5 text-purple-900">
+                  <button
+                    onClick={() => {
+                      if (onInspectCaseName) {
+                        onInspectCaseName(item.leadingCase!);
+                      } else if (onInspectItem) {
+                        onInspectItem(item);
+                      }
+                    }}
+                    className="flex items-center gap-1.5 text-purple-900 hover:text-purple-700 transition-colors text-left"
+                    title="Click to view case popup"
+                  >
                     <Scale className="w-3 h-3 text-purple-600 shrink-0" />
-                    <span className="italic truncate">{item.leadingCase}</span>
-                  </div>
+                    <span className="italic truncate underline decoration-dotted">{item.leadingCase}</span>
+                  </button>
                 )}
                 {item.examSignificance && (
                   <div className="flex items-start gap-1.5 text-amber-900 mt-1 bg-amber-50/60 p-1.5 rounded">

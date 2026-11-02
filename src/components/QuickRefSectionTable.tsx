@@ -5,11 +5,15 @@ import type { QuickRefSection } from '../types';
 interface QuickRefSectionTableProps {
   sections: QuickRefSection[];
   onSelectCase?: (caseId: string) => void;
+  onInspectSection?: (s: QuickRefSection) => void;
+  onInspectCaseName?: (caseName: string) => void;
 }
 
 export const QuickRefSectionTable: React.FC<QuickRefSectionTableProps> = ({
   sections,
   onSelectCase,
+  onInspectSection,
+  onInspectCaseName,
 }) => {
   const [filterQuery, setFilterQuery] = useState('');
   const [showHighOnly, setShowHighOnly] = useState(false);
@@ -93,9 +97,13 @@ export const QuickRefSectionTable: React.FC<QuickRefSectionTableProps> = ({
             {filtered.map((s) => (
               <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
                 <td className="py-3 px-3 align-top font-bold text-[#1A365D]">
-                  <div className="font-mono text-xs bg-blue-50 text-blue-900 px-2 py-1 rounded inline-block border border-blue-200">
+                  <button
+                    onClick={() => onInspectSection && onInspectSection(s)}
+                    className="font-mono text-xs bg-blue-50 hover:bg-blue-100 text-blue-900 px-2 py-1 rounded inline-block border border-blue-200 transition-colors text-left"
+                    title="Click for quick article info"
+                  >
                     {s.articleNumber || s.article || s.sectionNumber || 'Ref'}
-                  </div>
+                  </button>
                   {s.aibeFrequency === 'High' && (
                     <span className="block mt-1 text-[10px] text-rose-700 font-semibold uppercase tracking-wider">
                       ★ High Yield
@@ -103,7 +111,12 @@ export const QuickRefSectionTable: React.FC<QuickRefSectionTableProps> = ({
                   )}
                 </td>
                 <td className="py-3 px-3 align-top">
-                  <div className="font-semibold text-slate-900">{s.title || s.topic}</div>
+                  <button
+                    onClick={() => onInspectSection && onInspectSection(s)}
+                    className="font-semibold text-slate-900 hover:text-[#C05621] text-left transition-colors"
+                  >
+                    {s.title || s.topic}
+                  </button>
                   {s.partOrChapter && (
                     <div className="text-[10px] text-slate-500 mt-0.5">{s.partOrChapter}</div>
                   )}
@@ -124,18 +137,36 @@ export const QuickRefSectionTable: React.FC<QuickRefSectionTableProps> = ({
                 <td className="py-3 px-3 align-top">
                   {s.leadingCase ? (
                     <div>
-                      <div className="font-serif italic font-medium text-purple-900 flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          if (onInspectCaseName) {
+                            onInspectCaseName(s.leadingCase!);
+                          } else if (s.connectedCaseIds && s.connectedCaseIds.length > 0 && onSelectCase) {
+                            onSelectCase(s.connectedCaseIds[0]);
+                          }
+                        }}
+                        className="font-serif italic font-medium text-purple-900 hover:text-purple-700 flex items-center gap-1 text-left transition-colors"
+                        title="Click to view case summary popup"
+                      >
                         <Scale className="w-3 h-3 text-purple-600 shrink-0" />
                         <span>{s.leadingCase}</span>
-                      </div>
-                      {s.connectedCaseIds && s.connectedCaseIds.length > 0 && onSelectCase && (
+                      </button>
+                      <div className="flex items-center gap-2 mt-1">
                         <button
-                          onClick={() => onSelectCase(s.connectedCaseIds![0])}
-                          className="mt-1 text-[10px] text-[#C05621] hover:underline font-semibold"
+                          onClick={() => onInspectSection && onInspectSection(s)}
+                          className="text-[10px] text-blue-700 hover:underline font-semibold"
                         >
-                          View Case Card →
+                          Quick Article Info
                         </button>
-                      )}
+                        {s.connectedCaseIds && s.connectedCaseIds.length > 0 && onSelectCase && (
+                          <button
+                            onClick={() => onSelectCase(s.connectedCaseIds![0])}
+                            className="text-[10px] text-[#C05621] hover:underline font-semibold"
+                          >
+                            Case Card →
+                          </button>
+                        )}
+                      </div>
                     </div>
                   ) : (
                     <span className="text-slate-400 italic">Statutory</span>

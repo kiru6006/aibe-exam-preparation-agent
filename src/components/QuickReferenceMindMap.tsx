@@ -13,12 +13,14 @@ import {
   Search,
   AlertTriangle
 } from 'lucide-react';
-import type { QuickRefSubject, QuickRefChapter, QuickRefConceptChain, QuickRefQuestionLink } from '../types';
+import type { QuickRefSubject, QuickRefChapter, QuickRefConceptChain, QuickRefQuestionLink, QuickRefCase, QuickRefSection } from '../types';
 import { QuickRefMindmap } from './QuickRefMindmap';
 import { QuickRefCaseList } from './QuickRefCaseList';
 import { QuickRefSectionTable } from './QuickRefSectionTable';
 import { QuickRefTop15 } from './QuickRefTop15';
 import { QuickRefBridges } from './QuickRefBridges';
+import { QuickInfoModal, buildCaseInfoPayload, buildSectionInfoPayload } from './QuickInfoModal';
+import type { QuickInfoPayload } from './QuickInfoModal';
 
 interface QuickReferenceMindMapProps {
   subject: QuickRefSubject;
@@ -47,10 +49,66 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
   const [selectedChapter, setSelectedChapter] = useState<QuickRefChapter | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [questionSearch, setQuestionSearch] = useState<string>('');
+  const [modalInfo, setModalInfo] = useState<QuickInfoPayload | null>(null);
 
   const chapters = subject.chapters || [];
   const conceptChains = subject.conceptChains || [];
   const questionLinks = subject.questionLinks || [];
+
+  // Helper to open case popup by name or object
+  const handleInspectCase = (c: QuickRefCase) => {
+    setModalInfo(buildCaseInfoPayload(c, subject.subjectId));
+  };
+
+  const handleInspectCaseByName = (caseName: string) => {
+    const clean = caseName.toLowerCase().trim();
+    const found = subject.leadingCases.find(c =>
+      c.name.toLowerCase().includes(clean) ||
+      clean.includes(c.name.toLowerCase().split(' v.')[0]?.trim() || 'xyz')
+    );
+    if (found) {
+      setModalInfo(buildCaseInfoPayload(found, subject.subjectId));
+    } else {
+      setModalInfo({
+        type: 'case',
+        title: caseName,
+        badge: 'Legal Precedent',
+        badgeColor: 'purple',
+        summary: `Precedent referenced in Constitutional Law. Important landmark judgment cited in AIBE syllabus.`,
+        significance: 'Key legal precedent applied in multiple choice questions concerning constitutional provisions.',
+        practiceSubjectId: subject.subjectId,
+        practiceKeyword: caseName
+      });
+    }
+  };
+
+  // Helper to open article/section popup
+  const handleInspectSection = (s: QuickRefSection) => {
+    setModalInfo(buildSectionInfoPayload(s, subject.subjectId));
+  };
+
+  const handleInspectArticleByRef = (refText: string) => {
+    const clean = refText.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const found = subject.sections.find(s => {
+      const art = (s.articleNumber || s.article || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      return art === clean || clean.includes(art);
+    });
+
+    if (found) {
+      setModalInfo(buildSectionInfoPayload(found, subject.subjectId));
+    } else {
+      setModalInfo({
+        type: 'article',
+        title: refText,
+        badge: 'Constitutional Provision',
+        badgeColor: 'blue',
+        citationOrRef: refText,
+        summary: `Constitutional provision referenced in the syllabus and knowledge tree.`,
+        practiceSubjectId: subject.subjectId,
+        practiceKeyword: refText
+      });
+    }
+  };
 
   const filteredChapters = selectedCategory === 'all'
     ? chapters
@@ -417,13 +475,20 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
                 {selectedChapter.leadingCases && selectedChapter.leadingCases.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                      Key Precedents
+                      Key Precedents (Click for Quick Info)
                     </h4>
                     <div className="flex flex-wrap gap-1.5 mt-2">
                       {selectedChapter.leadingCases.map((c, idx) => (
-                        <span key={idx} className="text-xs font-serif italic text-purple-900 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded">
-                          {c}
-                        </span>
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleInspectCaseByName(c)}
+                          className="text-xs font-serif italic text-purple-900 bg-purple-50 hover:bg-purple-100 hover:text-purple-950 border border-purple-200 px-2.5 py-1 rounded transition-colors inline-flex items-center gap-1 text-left"
+                          title="Click to view case summary popup"
+                        >
+                          <Scale className="w-3 h-3 text-purple-600 shrink-0" />
+                          <span>{c}</span>
+                        </button>
                       ))}
                     </div>
                   </div>
@@ -459,7 +524,11 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
 
           {/* Hierarchical Tree View as Secondary Visual */}
           <div className="pt-4">
-            <QuickRefMindmap root={subject.mindmapRoot} />
+            <QuickRefMindmap
+              root={subject.mindmapRoot}
+              onInspectCaseName={handleInspectCaseByName}
+              onInspectArticle={handleInspectArticleByRef}
+            />
           </div>
         </div>
       )}
@@ -483,6 +552,7 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
             onPracticeTopic={
               onStartPractice ? () => onStartPractice(subject.subjectId, 10) : undefined
             }
+            onInspectCase={handleInspectCase}
           />
         </div>
       )}
@@ -493,6 +563,8 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
           <QuickRefSectionTable
             sections={subject.sections}
             onSelectCase={() => setActiveScreen('case-law')}
+            onInspectSection={handleInspectSection}
+            onInspectCaseName={handleInspectCaseByName}
           />
         </div>
       )}
@@ -540,16 +612,20 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
                   {chain.cases.length > 0 && (
                     <div className="mt-4 pt-3 border-t border-slate-100">
                       <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                        Landmark Precedents in this Chain:
+                        Landmark Precedents in this Chain (Click for Popup):
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         {chain.cases.map((cs, cIdx) => (
-                          <span
+                          <button
                             key={cIdx}
-                            className="text-xs font-serif italic text-purple-900 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded"
+                            type="button"
+                            onClick={() => handleInspectCaseByName(cs)}
+                            className="text-xs font-serif italic text-purple-900 bg-purple-50 hover:bg-purple-100 border border-purple-200 px-2 py-0.5 rounded transition-colors inline-flex items-center gap-1 text-left"
+                            title="Click for quick case info"
                           >
-                            {cs}
-                          </span>
+                            <Scale className="w-3 h-3 text-purple-600 shrink-0" />
+                            <span>{cs}</span>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -571,6 +647,7 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
             <QuickRefBridges
               bridges={subject.bridges}
               onSelectSubject={onSelectSubject}
+              onInspectReference={handleInspectCaseByName}
             />
           </div>
         </div>
@@ -625,6 +702,24 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
             onShowOnMap={() => {
               setActiveScreen('chapter-map');
             }}
+            onInspectItem={(item) => {
+              if (item.leadingCase) {
+                handleInspectCaseByName(item.leadingCase);
+              } else if (item.articleRef) {
+                handleInspectArticleByRef(item.articleRef);
+              } else {
+                setModalInfo({
+                  type: 'concept',
+                  title: item.title,
+                  badge: `Rank #${item.rank}`,
+                  badgeColor: 'amber',
+                  ruleOrHolding: item.summary,
+                  significance: item.examSignificance,
+                  practiceSubjectId: subject.subjectId
+                });
+              }
+            }}
+            onInspectCaseName={handleInspectCaseByName}
           />
         </div>
       )}
@@ -672,7 +767,23 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
                   </div>
 
                   <div className="mt-2 text-xs font-bold text-[#C05621]">
-                    Tested: {ql.conceptOrArticle}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (ql.conceptOrArticle.toLowerCase().includes('art')) {
+                          handleInspectArticleByRef(ql.conceptOrArticle);
+                        } else {
+                          handleInspectCaseByName(ql.conceptOrArticle);
+                        }
+                      }}
+                      className="hover:underline flex items-center gap-1 text-left"
+                      title="Click for quick concept/article popup"
+                    >
+                      <span>Tested: {ql.conceptOrArticle}</span>
+                      <span className="text-[10px] font-normal text-blue-700 underline font-sans">
+                        (View Rule)
+                      </span>
+                    </button>
                   </div>
 
                   <p className="text-xs text-slate-700 mt-2 leading-relaxed bg-[#FAF8F5] p-3 rounded-lg border border-[#E8E2DA]">
@@ -706,6 +817,15 @@ export const QuickReferenceMindMap: React.FC<QuickReferenceMindMapProps> = ({
           )}
         </div>
       )}
+
+      {/* Global In-Page Quick Info Modal Popup */}
+      <QuickInfoModal
+        info={modalInfo}
+        onClose={() => setModalInfo(null)}
+        onStartPractice={onStartPractice}
+        onSelectCase={handleInspectCaseByName}
+        onSelectArticle={handleInspectArticleByRef}
+      />
     </div>
   );
 };
