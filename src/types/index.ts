@@ -195,6 +195,12 @@ export interface QuickRefCase {
   examFrequency?: string;
   connectedConcepts?: string[];
   article?: string;
+  // Structured Case Law Briefing fields
+  facts?: string;
+  issues?: string;
+  legalProvisions?: string;
+  reasonsAndApplications?: string;
+  summary?: string;
 }
 
 export interface QuickRefSection {

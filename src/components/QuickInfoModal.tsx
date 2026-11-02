@@ -33,6 +33,11 @@ export interface QuickInfoPayload {
   connectedArticlesOrCases?: string[];
   practiceSubjectId?: string;
   practiceKeyword?: string;
+  // Structured Brief fields
+  facts?: string;
+  issues?: string;
+  legalProvisions?: string;
+  reasonsAndApplications?: string;
 }
 
 interface QuickInfoModalProps {
@@ -135,8 +140,56 @@ export const QuickInfoModal: React.FC<QuickInfoModalProps> = ({
           </div>
         )}
 
-        {/* Summary */}
-        {info.summary && (
+        {/* Structured Case Brief: Facts, Issues, Legal Provisions, Reasons & Applications, Summary */}
+        {info.facts && (
+          <div className="space-y-3 pt-2 border-t border-slate-100">
+            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+              <div className="font-bold text-[#1A365D] uppercase tracking-wider text-[11px] mb-1 flex items-center gap-1">
+                <span>📋 Facts of the Case</span>
+              </div>
+              <p className="text-slate-700 leading-relaxed">{info.facts}</p>
+            </div>
+
+            {info.issues && (
+              <div className="p-3 bg-amber-50/50 rounded-xl border border-amber-200 text-xs">
+                <div className="font-bold text-amber-900 uppercase tracking-wider text-[11px] mb-1 flex items-center gap-1">
+                  <span>⚖️ Legal Issues Before Court</span>
+                </div>
+                <p className="text-slate-700 leading-relaxed">{info.issues}</p>
+              </div>
+            )}
+
+            {info.legalProvisions && (
+              <div className="p-3 bg-blue-50/50 rounded-xl border border-blue-200 text-xs">
+                <div className="font-bold text-blue-900 uppercase tracking-wider text-[11px] mb-1 flex items-center gap-1">
+                  <span>📜 Legal Provisions & Articles Involved</span>
+                </div>
+                <p className="text-slate-700 leading-relaxed font-mono text-[11px]">{info.legalProvisions}</p>
+              </div>
+            )}
+
+            {info.reasonsAndApplications && (
+              <div className="p-3 bg-purple-50/50 rounded-xl border border-purple-200 text-xs">
+                <div className="font-bold text-purple-900 uppercase tracking-wider text-[11px] mb-1 flex items-center gap-1">
+                  <span>💡 Reasons & Judicial Applications (Ratio Decidendi)</span>
+                </div>
+                <p className="text-slate-700 leading-relaxed">{info.reasonsAndApplications}</p>
+              </div>
+            )}
+
+            {info.summary && (
+              <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-200 text-xs">
+                <div className="font-bold text-emerald-900 uppercase tracking-wider text-[11px] mb-1 flex items-center gap-1">
+                  <span>🎯 Summary & Key Exam Takeaway</span>
+                </div>
+                <p className="text-slate-800 leading-relaxed">{info.summary}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Regular Summary if no structured facts */}
+        {!info.facts && info.summary && (
           <div className="text-xs text-slate-700 leading-relaxed">
             {info.summary}
           </div>
@@ -234,6 +287,11 @@ export function buildCaseInfoPayload(c: QuickRefCase, subjectId: string): QuickI
     connectedArticlesOrCases: c.connectedArticles,
     practiceSubjectId: subjectId,
     practiceKeyword: c.name,
+    facts: c.facts,
+    issues: c.issues,
+    legalProvisions: c.legalProvisions,
+    reasonsAndApplications: c.reasonsAndApplications,
+    summary: c.summary,
   };
 }
 
@@ -252,3 +310,4 @@ export function buildSectionInfoPayload(s: QuickRefSection, subjectId: string): 
     practiceKeyword: s.articleNumber || s.article,
   };
 }
+
