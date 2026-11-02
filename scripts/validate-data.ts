@@ -1,6 +1,8 @@
 import { QUESTIONS_BANK } from '../src/data/questions';
 import { OFFICIAL_SUBJECTS } from '../src/data/subjects';
 import { OFFICIAL_EXAMS } from '../src/data/exams';
+import { getAllQuickRefSubjects } from '../src/data/quick-reference';
+import { MindNode } from '../src/types';
 
 interface ValidationError {
   type: string;
@@ -92,6 +94,61 @@ function validateData(): boolean {
   if (aibe20Withdrawn !== 5) {
     errors.push({ type: "Exam-Check", id: "AIBE-20", message: `Expected 5 withdrawn questions, got ${aibe20Withdrawn}` });
   }
+
+  // 4. Validate Legal Quick Reference Modules
+  const quickRefSubjects = getAllQuickRefSubjects();
+  console.log(`\nAuditing Legal Quick Reference Modules (${quickRefSubjects.length} active)...`);
+
+  quickRefSubjects.forEach(qr => {
+    // Subject ID must match official subjects
+    if (!subjectIds.has(qr.subjectId)) {
+      errors.push({ type: "QuickRef", id: qr.subjectId, message: `Invalid subjectId '${qr.subjectId}'` });
+    }
+
+    // Collect all mindmap node IDs and verify uniqueness
+    const mindmapNodeIds = new Set<string>();
+    function traverse(node: MindNode) {
+      if (!node.id) {
+        errors.push({ type: "QuickRef-Mindmap", id: qr.subjectId, message: "Node missing ID" });
+      } else if (mindmapNodeIds.has(node.id)) {
+        errors.push({ type: "QuickRef-Mindmap", id: node.id, message: `Duplicate node ID in ${qr.subjectId}` });
+      } else {
+        mindmapNodeIds.add(node.id);
+      }
+      if (node.children) {
+        node.children.forEach(traverse);
+      }
+    }
+    traverse(qr.mindmapRoot);
+
+    // Verify leading cases connect to valid mindmap nodes
+    const validTags = new Set(['Certain', 'Likely', 'Guessing', 'Verify']);
+    qr.leadingCases.forEach(c => {
+      if (!validTags.has(c.tag)) {
+        errors.push({ type: "QuickRef-Case", id: c.id, message: `Invalid tag '${c.tag}'` });
+      }
+      if (!mindmapNodeIds.has(c.connectedNodeId)) {
+        errors.push({ type: "QuickRef-Case", id: c.id, message: `connectedNodeId '${c.connectedNodeId}' does not exist in mindmap` });
+      }
+    });
+
+    // Verify Top15 nodes connect to valid mindmap nodes
+    qr.top15.forEach(t => {
+      if (!validTags.has(t.tag)) {
+        errors.push({ type: "QuickRef-Top15", id: t.id, message: `Invalid tag '${t.tag}'` });
+      }
+      if (!mindmapNodeIds.has(t.nodeId)) {
+        errors.push({ type: "QuickRef-Top15", id: t.id, message: `nodeId '${t.nodeId}' does not exist in mindmap` });
+      }
+    });
+
+    // Verify Bridges target valid official subjects
+    qr.bridges.forEach(b => {
+      if (!subjectIds.has(b.targetSubjectId)) {
+        errors.push({ type: "QuickRef-Bridge", id: qr.subjectId, message: `Invalid targetSubjectId '${b.targetSubjectId}'` });
+      }
+    });
+  });
 
   console.log(`Total Questions Audited: ${QUESTIONS_BANK.length}`);
   console.log(`Total Exams Audited: ${OFFICIAL_EXAMS.length}`);

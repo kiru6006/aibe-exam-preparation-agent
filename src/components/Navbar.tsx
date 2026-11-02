@@ -7,6 +7,7 @@ import {
   CheckCircle2, 
   Lightbulb, 
   Award, 
+  Compass,
   FileText, 
   Layers, 
   BarChart2, 
@@ -151,6 +152,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </div>
                 )}
               </div>
+
+              {/* Legal Quick Reference Button */}
+              <button
+                onClick={() => handleTabClick('quick-ref')}
+                className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  currentTab === 'quick-ref'
+                    ? 'bg-[#1A365D] text-white shadow-xs'
+                    : 'text-[#4A5568] hover:text-[#1A365D] hover:bg-[#F1F3F7]'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 text-[#C05621]" />
+                <span>Quick Reference</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-200">Pilot</span>
+              </button>
 
               {/* Strategy & Tips Dropdown */}
               <div className="relative">
@@ -311,6 +326,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             Practice My Mistakes
+          </button>
+
+          <button
+            onClick={() => handleTabClick('quick-ref')}
+            className={`w-full text-left px-3 py-2 rounded-lg text-sm font-semibold flex items-center justify-between ${
+              currentTab === 'quick-ref' ? 'bg-[#1A365D] text-white' : 'text-[#2D3748]'
+            }`}
+          >
+            <span>Legal Quick Reference</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200">Pilot</span>
           </button>
 
           <div className="pt-3 pb-1 text-[11px] font-mono uppercase tracking-wider text-[#718096] px-3">

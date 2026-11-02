@@ -24,10 +24,14 @@ import { StrategyTipsView } from './components/StrategyTipsView';
 import { AboutView } from './components/AboutView';
 import { ExamView } from './components/ExamView';
 import { ResultView } from './components/ResultView';
+import { QuickReferenceView } from './components/QuickReferenceView';
+import { QuickRefSubjectView } from './components/QuickRefSubjectView';
+import { getQuickRef } from './data/quick-reference';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState<string>('home');
   const [strategySubTab, setStrategySubTab] = useState<string>('how-to-prepare');
+  const [quickRefSubjectId, setQuickRefSubjectId] = useState<string | null>(null);
   const [activeSession, setActiveSession] = useState<Attempt | null>(null);
   const [completedResult, setCompletedResult] = useState<{
     attempt: Attempt;
@@ -40,6 +44,22 @@ export function App() {
     if (saved && !saved.completedAt) {
       setActiveSession(saved);
     }
+
+    // Support deep-linking via hash, e.g. #quick-ref/constitutional-law
+    const parseHash = () => {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash.startsWith('quick-ref')) {
+        const parts = hash.split('/');
+        setCurrentTab('quick-ref');
+        if (parts[1]) {
+          setQuickRefSubjectId(parts[1]);
+        }
+      }
+    };
+
+    parseHash();
+    window.addEventListener('hashchange', parseHash);
+    return () => window.removeEventListener('hashchange', parseHash);
   }, []);
 
   const mistakesList = StorageService.getMistakeQuestionIds();
@@ -79,6 +99,11 @@ export function App() {
       setStrategySubTab('plans');
     } else if (tab === 'mistakes') {
       handlePracticeMistakes();
+    } else if (tab === 'quick-ref') {
+      setCurrentTab('quick-ref');
+      if (subTab) {
+        setQuickRefSubjectId(subTab);
+      }
     } else {
       setCurrentTab(tab);
     }
@@ -362,6 +387,35 @@ export function App() {
             questions={QUESTIONS_BANK}
             subjects={OFFICIAL_SUBJECTS}
           />
+        )}
+
+        {currentTab === 'quick-ref' && (
+          quickRefSubjectId && getQuickRef(quickRefSubjectId) ? (
+            <QuickRefSubjectView
+              subject={getQuickRef(quickRefSubjectId)!}
+              onBackToIndex={() => {
+                setQuickRefSubjectId(null);
+                window.location.hash = 'quick-ref';
+              }}
+              onStartPractice={(subjId, limit) => handleStartSubjectPractice(subjId, limit)}
+              onSelectSubject={(subjId) => {
+                if (getQuickRef(subjId)) {
+                  setQuickRefSubjectId(subjId);
+                  window.location.hash = `quick-ref/${subjId}`;
+                } else {
+                  handleStartSubjectPractice(subjId);
+                }
+              }}
+            />
+          ) : (
+            <QuickReferenceView
+              onSelectSubject={(subjId) => {
+                setQuickRefSubjectId(subjId);
+                window.location.hash = `quick-ref/${subjId}`;
+              }}
+              onStartPractice={(subjId, limit) => handleStartSubjectPractice(subjId, limit)}
+            />
+          )
         )}
 
         {currentTab === 'about' && (
