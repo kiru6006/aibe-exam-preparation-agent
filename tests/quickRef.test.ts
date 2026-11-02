@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { QUICK_REF, getQuickRef, getAllQuickRefSubjects } from '../src/data/quick-reference';
+import { getQuickRef, getAllQuickRefSubjects } from '../src/data/quick-reference';
 import { OFFICIAL_SUBJECTS } from '../src/data/subjects';
 import { MindNode } from '../src/types';
 

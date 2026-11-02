@@ -8,11 +8,400 @@ export const CONSTITUTIONAL_LAW_QUICK_REF: QuickRefSubject = {
   priority: 'Critical',
   tagline: 'The Supreme Lex — 10 guaranteed questions covering Part III Fundamental Rights, Writs, and Basic Structure.',
   metaStats: {
-    chaptersCount: 7,
-    articlesCount: 22,
-    leadingCasesCount: 12,
+    chaptersCount: 12,
+    articlesCount: 28,
+    leadingCasesCount: 15,
     aibeQuestionCount: 284,
   },
+  chapters: [
+    {
+      id: 'ch-1',
+      chapterNumber: 1,
+      title: 'Constitutional Foundations',
+      articlesOrSections: 'Preamble, Arts 1-4, Arts 5-11',
+      category: 'foundations',
+      keyConcepts: [
+        'Preamble as integral part of Constitution (Kesavananda)',
+        'Sovereign, Socialist, Secular, Democratic, Republic (42nd Amend)',
+        'Constitutional supremacy vs Parliamentary sovereignty',
+        'Separation of powers and Rule of Law',
+        'Single citizenship and territorial integrity (Arts 1-4)'
+      ],
+      aibeRelevance: 'Preamble status, basic structure genesis, and nature of Indian federalism are asked in nearly every session.',
+      examTrap: 'Preamble is non-justiciable (cannot be enforced alone in court) though it is an integral part of the Constitution.',
+      leadingCases: ['Kesavananda Bharati (1973)', 'Berubari Union (1960)', 'Indira Gandhi v. Raj Narain (1975)']
+    },
+    {
+      id: 'ch-2',
+      chapterNumber: 2,
+      title: 'Fundamental Rights & Golden Triangle',
+      articlesOrSections: 'Articles 12 to 35 (Part III)',
+      category: 'rights',
+      keyConcepts: [
+        'Definition of State & 6 tests of instrumentality (Art 12)',
+        'Doctrines of Severability, Eclipse, and Non-Waiver (Art 13)',
+        'Reasonable Classification & Anti-Arbitrariness (Art 14)',
+        'Six Freedoms restricted exclusively under 19(2)-(6) (Art 19)',
+        'Triple criminal protections: Ex-post facto, Double jeopardy, Self-incrimination (Art 20)',
+        'Substantive due process & Right to Privacy (Art 21)',
+        'Compulsory free education for ages 6-14 (Art 21A, 86th Amend)',
+        'Safeguards upon arrest & 24hr magistrate production (Art 22)'
+      ],
+      aibeRelevance: 'Highest weightage area — typically 4-5 direct questions per 100-question paper.',
+      examTrap: 'Article 19 freedoms belong ONLY to natural citizens of India; companies and foreign nationals cannot invoke Art 19.',
+      leadingCases: ['Maneka Gandhi (1978)', 'K.S. Puttaswamy (2017)', 'E.P. Royappa (1974)', 'Ajay Hasia (1981)']
+    },
+    {
+      id: 'ch-3',
+      chapterNumber: 3,
+      title: 'Directive Principles of State Policy',
+      articlesOrSections: 'Articles 36 to 51 (Part IV)',
+      category: 'dpsp-duties',
+      keyConcepts: [
+        'Non-justiciable instruments of instruction (Art 37)',
+        'Equal justice and free legal aid (Art 39A)',
+        'Organization of village panchayats (Art 40)',
+        'Uniform Civil Code for the citizens (Art 44)',
+        'Early childhood care below 6 years (Art 45)',
+        'Protection of environment and wild life (Art 48A)',
+        'Separation of judiciary from executive (Art 50)'
+      ],
+      aibeRelevance: 'Questions frequently test specific Article numbers (e.g., UCC Art 44, Free Legal Aid Art 39A, Environment Art 48A).',
+      examTrap: 'DPSPs cannot be directly enforced by writs, but laws giving effect to Arts 39(b) and (c) enjoy limited immunity under Art 31C.',
+      leadingCases: ['Minerva Mills (1980)', 'State of Madras v. Champakam Dorairajan (1951)']
+    },
+    {
+      id: 'ch-4',
+      chapterNumber: 4,
+      title: 'Fundamental Duties',
+      articlesOrSections: 'Article 51A (Part IV-A)',
+      category: 'dpsp-duties',
+      keyConcepts: [
+        'Recommended by Sardar Swaran Singh Committee (1976)',
+        'Added by 42nd Constitutional Amendment Act 1976 (10 duties)',
+        '11th duty added by 86th Constitutional Amendment 2002',
+        'Duty to abide by Constitution, respect flag and anthem',
+        'Duty to protect natural environment, lakes, and wildlife (51A(g))',
+        'Duty to develop scientific temper and humanism (51A(h))',
+        'Parental duty to educate child 6 to 14 years (51A(k))'
+      ],
+      aibeRelevance: 'Frequently tests amendment numbers (42nd vs 86th), total count (11 duties), and committee name.',
+      examTrap: 'Fundamental duties were NOT in the original 1950 Constitution and are not directly enforceable by prerogative writs.',
+      leadingCases: ['M.C. Mehta v. Union of India (1988)', 'AIIMS Students Union v. AIIMS (2002)']
+    },
+    {
+      id: 'ch-5',
+      chapterNumber: 5,
+      title: 'Union Executive & Council of Ministers',
+      articlesOrSections: 'Articles 52 to 78 (Part V)',
+      category: 'governance',
+      keyConcepts: [
+        'President of India: Head of State, elected by electoral college (Arts 52, 54)',
+        'Executive power exercised on aid and advice of Council of Ministers (Art 74)',
+        'Council of Ministers collectively responsible to Lok Sabha (Art 75(3))',
+        'Pardoning powers of President (Art 72) vs Governor (Art 161)',
+        'Attorney General for India: First law officer, right of audience (Art 76)'
+      ],
+      aibeRelevance: 'Focuses on pardoning power (Art 72), collective responsibility, and Attorney General rights.',
+      examTrap: 'Attorney General has the right to speak and take part in Parliament proceedings but has NO right to vote (Art 88).',
+      leadingCases: ['Kehar Singh v. Union of India (1989)', 'Shamsher Singh v. State of Punjab (1974)']
+    },
+    {
+      id: 'ch-6',
+      chapterNumber: 6,
+      title: 'Parliament & Legislative Procedure',
+      articlesOrSections: 'Articles 79 to 123 (Part V)',
+      category: 'governance',
+      keyConcepts: [
+        'Bicameral Parliament: Rajya Sabha (Council of States) & Lok Sabha (House of the People)',
+        'Speaker of Lok Sabha & finality of Money Bill certification (Art 110)',
+        'Joint Sitting of both Houses presided over by Speaker (Art 108)',
+        'Presidential Ordinance making power during parliamentary recess (Art 123)',
+        'Parliamentary privileges of members (Art 105)',
+        'Anti-Defection Law disqualification by Chairman/Speaker (10th Schedule)'
+      ],
+      aibeRelevance: 'Money bill criteria, joint sitting president, ordinance validity duration (max 6 months + 6 weeks).',
+      examTrap: 'Money Bills can be introduced ONLY in Lok Sabha with prior recommendation of President; Rajya Sabha can only delay for 14 days.',
+      leadingCases: ['D.C. Wadhwa v. State of Bihar (1987)', 'Kihoto Hollohan v. Zachillhu (1992)']
+    },
+    {
+      id: 'ch-7',
+      chapterNumber: 7,
+      title: 'Supreme Court & Union Judiciary',
+      articlesOrSections: 'Articles 124 to 147 (Part V)',
+      category: 'judiciary',
+      keyConcepts: [
+        'Establishment & Collegium system of judicial appointments (Art 124)',
+        'Court of Record and power to punish for contempt (Art 129)',
+        'Original exclusive jurisdiction in federal disputes (Art 131)',
+        'Special Leave Petition (SLP) discretionary power (Art 136)',
+        'Law declared by Supreme Court binding on all courts (Art 141)',
+        'Complete justice decree power & Curative Petitions (Art 142)',
+        'Advisory Jurisdiction on Presidential reference (Art 143)'
+      ],
+      aibeRelevance: 'Binding precedents (141), complete justice (142), SLP scope (136), advisory power (143).',
+      examTrap: 'Under Art 143(1) the Supreme Court may refuse to give advisory opinion, but under 143(2) (pre-constitutional covenants) it is bound to answer.',
+      leadingCases: ['Rupa Ashok Hurra v. Ashok Hurra (2002)', 'Supreme Court Advocates-on-Record Assn (2016)']
+    },
+    {
+      id: 'ch-8',
+      chapterNumber: 8,
+      title: 'High Courts & Subordinate Courts',
+      articlesOrSections: 'Articles 214 to 237 (Part VI)',
+      category: 'judiciary',
+      keyConcepts: [
+        'High Court for each State, Court of Record (Arts 214, 215)',
+        'Writ jurisdiction for Fundamental Rights + "any other purpose" (Art 226)',
+        'Superintendence over all courts and tribunals in territory (Art 227)',
+        'Appointment of District Judges in consultation with High Court (Art 233)',
+        'Comparison: Art 32 (SC remedy as an FR) vs Art 226 (HC wider discretionary remedy)'
+      ],
+      aibeRelevance: 'Comparison between Article 32 and Article 226 is one of the top 3 repeated constitutional themes in AIBE history.',
+      examTrap: 'Art 226 jurisdiction is wider in subject-matter than Art 32, but Art 226 is a discretionary constitutional right, not a guaranteed Fundamental Right.',
+      leadingCases: ['L. Chandra Kumar v. Union of India (1997)', 'Bandhua Mukti Morcha (1984)']
+    },
+    {
+      id: 'ch-9',
+      chapterNumber: 9,
+      title: 'Federal Structure & Relations',
+      articlesOrSections: 'Articles 245 to 293 (Part XI & XII)',
+      category: 'federal',
+      keyConcepts: [
+        'Territorial extent of legislative powers (Art 245)',
+        'Subject-matter distribution: 7th Schedule (Union, State, Concurrent Lists) (Art 246)',
+        'Residuary legislative powers vest exclusively in Parliament (Art 248)',
+        'Parliamentary power to legislate for States on national interest or treaty (Arts 249, 253)',
+        'Doctrine of Repugnancy in Concurrent List matters (Art 254)',
+        'Full Faith and Credit clause across states (Art 261)',
+        'Inter-State River Water Disputes adjudication (Art 262)'
+      ],
+      aibeRelevance: 'List entries (7th Schedule), Residuary powers (Art 248), Repugnancy tests (Art 254).',
+      examTrap: 'In Concurrent List repugnancy, Presidential assent under Art 254(2) protects State law within that State until Parliament passes a later law overruling it.',
+      leadingCases: ['State of West Bengal v. Committee for Protection of Democratic Rights (2010)']
+    },
+    {
+      id: 'ch-10',
+      chapterNumber: 10,
+      title: 'Emergency Provisions',
+      articlesOrSections: 'Articles 352 to 360 (Part XVIII)',
+      category: 'emergency-amendment',
+      keyConcepts: [
+        'National Emergency: War, External Aggression, Armed Rebellion (Art 352)',
+        'Written recommendation of Cabinet required; approved by special majority within 1 month',
+        'State breakdown / President’s Rule upon Governor report (Art 356)',
+        'Suspension of Article 19 automatically during war/external aggression only (Art 358)',
+        'Presidential suspension of right to move court for other FRs (Art 359)',
+        'Non-derogable core: Articles 20 and 21 can NEVER be suspended (44th Amendment)',
+        'Financial Emergency declared on financial credit threat (Art 360 - Never used)'
+      ],
+      aibeRelevance: '44th Amendment reforms (Arts 20 & 21 non-suspension, Armed rebellion substitution, Bommai guidelines on Art 356).',
+      examTrap: 'Article 356 proclamation dissolves State Assembly ONLY after approval by Parliament; till then assembly remains suspended.',
+      leadingCases: ['S.R. Bommai v. Union of India (1994)', 'Minerva Mills (1980)']
+    },
+    {
+      id: 'ch-11',
+      chapterNumber: 11,
+      title: 'Constitutional Amendment & Basic Structure',
+      articlesOrSections: 'Article 368 (Part XX)',
+      category: 'emergency-amendment',
+      keyConcepts: [
+        'Constituent power of Parliament to amend by addition, variation or repeal (Art 368)',
+        'Three amendment mechanisms: Simple majority, Special majority (2/3 present + 50% total), Special + 50% State ratification',
+        'Basic Structure Doctrine limits amending power (Kesavananda 1973)',
+        '42nd Amendment clauses (4) and (5) seeking unlimited power struck down in Minerva Mills (1980)',
+        'Ninth Schedule post-1973 laws subject to Basic Structure judicial review (I.R. Coelho 2007)'
+      ],
+      aibeRelevance: 'Bench size (13 judges), cut-off date (24 April 1973), and basic structure core elements.',
+      examTrap: 'Basic Structure is nowhere defined in the constitutional text; it is an open-ended judge-made doctrine.',
+      leadingCases: ['Kesavananda Bharati (1973)', 'I.C. Golaknath (1967)', 'Minerva Mills (1980)', 'I.R. Coelho (2007)']
+    },
+    {
+      id: 'ch-12',
+      chapterNumber: 12,
+      title: 'Constitutional Bodies & Independent Authorities',
+      articlesOrSections: 'Articles 148, 280, 315, 324, 279A',
+      category: 'governance',
+      keyConcepts: [
+        'Election Commission of India: Superintendence, direction, and control of elections (Art 324)',
+        'Comptroller and Auditor General of India (CAG): Guardian of public purse (Arts 148-151)',
+        'Finance Commission: Recommendations on tax sharing between Union and States (Art 280)',
+        'Union and State Public Service Commissions: Recruitment examinations (Art 315)',
+        'Goods and Services Tax (GST) Council chaired by Union Finance Minister (Art 279A)'
+      ],
+      aibeRelevance: 'Articles 324 (ECI), 280 (Finance Commission), and 148 (CAG) are direct memory questions.',
+      examTrap: 'Planning Commission / NITI Aayog is NOT a constitutional body (it is created by executive resolution); Finance Commission IS constitutional (Art 280).',
+      leadingCases: ['T.N. Seshan v. Union of India (1995)', 'Mohinder Singh Gill v. CEC (1978)']
+    }
+  ],
+  conceptChains: [
+    {
+      id: 'chain-1',
+      title: 'Equality Doctrine Evolution',
+      steps: [
+        'Article 14 Text (Equality Before Law & Equal Protection)',
+        'Reasonable Classification Test (Differentia + Rational Nexus)',
+        'Anti-Arbitrariness Doctrine (Royappa 1974)',
+        'Substantive Fairness Requirement (Maneka Gandhi 1978)',
+        'Modern Rule of Law & Manifest Arbitrariness (Shayara Bano 2017)'
+      ],
+      cases: ['E.P. Royappa v. State of TN', 'Maneka Gandhi v. UOI', 'Shayara Bano v. UOI'],
+      takeaway: 'Equality is a dynamic concept that strikes down any arbitrary, unreasonable, or unfair state action.'
+    },
+    {
+      id: 'chain-2',
+      title: 'Freedom of Speech & Digital Restraints',
+      steps: [
+        'Article 19(1)(a) Fundamental Freedom of Speech',
+        'Exhaustive Grounds of Restriction in Article 19(2)',
+        'Requirement of Reasonableness & Clear and Present Danger',
+        'Distinction: Discussion vs Advocacy vs Incitement',
+        'Striking down Section 66A IT Act for Overbreadth & Vagueness (Shreya Singhal 2015)'
+      ],
+      cases: ['Romesh Thappar v. State of Madras', 'Shreya Singhal v. UOI', 'Anuradha Bhasin v. UOI'],
+      takeaway: 'Speech can only be curbed under the 8 exhaustively listed grounds in 19(2); vague chilling effects are unconstitutional.'
+    },
+    {
+      id: 'chain-3',
+      title: 'Life, Personal Liberty & Right to Privacy',
+      steps: [
+        'Article 21 Text ("Procedure Established by Law")',
+        'Narrow Positivist Interpretation in A.K. Gopalan (1950)',
+        'Golden Triangle & Just, Fair, Reasonable Due Process (Maneka Gandhi 1978)',
+        'Expansion into Unwritten Human Rights (Clean Environment, Speedy Trial, Dignity)',
+        'Unanimous 9-Judge Confirmation of Privacy as Fundamental Right (Puttaswamy 2017)'
+      ],
+      cases: ['A.K. Gopalan (1950)', 'Maneka Gandhi (1978)', 'K.S. Puttaswamy (2017)'],
+      takeaway: 'Article 21 is a living tree; state infringements on life and liberty must satisfy legality, legitimate aim, and proportionality.'
+    },
+    {
+      id: 'chain-4',
+      title: 'Constitutional Amendment & Basic Structure',
+      steps: [
+        'Article 368 Constituent Amending Power',
+        'Part III amendable (Shankari Prasad 1951, Sajjan Singh 1965)',
+        'Fundamental Rights unamendable (I.C. Golaknath 1967)',
+        'Parliament can amend everything EXCEPT Basic Structure (Kesavananda 1973)',
+        'Immunity of 9th Schedule ended for post-1973 statutes (I.R. Coelho 2007)'
+      ],
+      cases: ['Golaknath (1967)', 'Kesavananda Bharati (1973)', 'Minerva Mills (1980)', 'I.R. Coelho (2007)'],
+      takeaway: 'Amending power under Art 368 is not constituent power to destroy the Constitution’s foundational identity.'
+    },
+    {
+      id: 'chain-5',
+      title: 'Prerogative Writs & Public Interest Litigation (PIL)',
+      steps: [
+        'Article 32 (Supreme Court) & Article 226 (High Court)',
+        'Traditional Strict Locus Standi (Aggrieved Person Only)',
+        'Relaxation of Locus Standi for Disadvantaged Classes (S.P. Gupta 1981)',
+        'Epistolary Jurisdiction (Treating Letters as Writ Petitions)',
+        'Judicial Review of Administrative/Legislative Failure (Bandhua Mukti Morcha 1984)'
+      ],
+      cases: ['S.P. Gupta v. UOI', 'Bandhua Mukti Morcha v. UOI', 'L. Chandra Kumar v. UOI'],
+      takeaway: 'Writs transformed from colonial prerogatives into participatory instruments for social justice.'
+    }
+  ],
+  questionLinks: [
+    {
+      id: 'ql-1',
+      conceptOrArticle: 'Article 21 & Procedure Established by Law',
+      examId: 'AIBE-9',
+      questionNumber: 40,
+      year: 2016,
+      questionSnippet: 'The word "procedure established by law" in Article 21 means just, fair, and reasonable procedure post-Maneka Gandhi.',
+      questionId: 'AIBE-9-Q040',
+      verified: true
+    },
+    {
+      id: 'ql-2',
+      conceptOrArticle: 'Article 19 Citizen Exclusivity',
+      examId: 'AIBE-11',
+      questionNumber: 49,
+      year: 2017,
+      questionSnippet: 'Which of the following can claim Article 19 of the Constitution? (Only Indian Citizens, not foreign corporations).',
+      questionId: 'AIBE-11-Q049',
+      verified: true
+    },
+    {
+      id: 'ql-3',
+      conceptOrArticle: 'Article 19 Freedom of Speech & IT Act',
+      examId: 'AIBE-15',
+      questionNumber: 45,
+      year: 2020,
+      questionSnippet: 'Section 66A of the Information Technology Act was struck down under Art. 19(1)(a) in Shreya Singhal.',
+      questionId: 'AIBE-15-Q045',
+      verified: true
+    },
+    {
+      id: 'ql-4',
+      conceptOrArticle: 'Preamble Status as Part of Constitution',
+      examId: 'AIBE-20',
+      questionNumber: 76,
+      year: 2025,
+      questionSnippet: 'In which case did the Supreme Court hold that the Preamble is an integral part of the Constitution? (Kesavananda Bharati).',
+      questionId: 'AIBE-20-Q076',
+      verified: true
+    },
+    {
+      id: 'ql-5',
+      conceptOrArticle: 'Right to Privacy under Article 21',
+      examId: 'AIBE-20',
+      questionNumber: 78,
+      year: 2025,
+      questionSnippet: 'In which judgment was the issue of "Right to Privacy" affirmed as a fundamental right? (K.S. Puttaswamy).',
+      questionId: 'AIBE-20-Q078',
+      verified: true
+    },
+    {
+      id: 'ql-6',
+      conceptOrArticle: 'Article 368 & Fundamental Rights Amendment',
+      examId: 'AIBE-7',
+      questionNumber: 35,
+      year: 2014,
+      questionSnippet: 'The question whether Fundamental Rights can be amended under Article 368 came for consideration in Shankari Prasad.',
+      questionId: 'AIBE-7-Q035',
+      verified: true
+    },
+    {
+      id: 'ql-7',
+      conceptOrArticle: 'Harmony Between Part III & Part IV',
+      examId: 'AIBE-6',
+      questionNumber: 96,
+      year: 2014,
+      questionSnippet: 'Held by the Supreme Court that the balance between Fundamental Rights and Directive Principles is a basic feature (Minerva Mills).',
+      questionId: 'AIBE-6-Q096',
+      verified: true
+    },
+    {
+      id: 'ql-8',
+      conceptOrArticle: 'Article 32 Writ Powers & Locus Standi',
+      examId: 'AIBE-15',
+      questionNumber: 49,
+      year: 2020,
+      questionSnippet: 'Where a legal wrong or legal injury is caused to a person or class, any member of the public can maintain an application under Art 32/226.',
+      questionId: 'AIBE-15-Q049',
+      verified: true
+    },
+    {
+      id: 'ql-9',
+      conceptOrArticle: 'Basic Structure & Constitutional Amendments',
+      examId: 'AIBE-21',
+      questionNumber: 4,
+      year: 2026,
+      questionSnippet: 'Under the Constitution of India, consider statements in the context of Article 368 and the Basic Structure Doctrine.',
+      questionId: 'AIBE-21-Q004',
+      verified: true
+    },
+    {
+      id: 'ql-10',
+      conceptOrArticle: 'Workplace Sexual Harassment & CEDAW',
+      examId: 'AIBE-13',
+      questionNumber: 8,
+      year: 2018,
+      questionSnippet: 'The Supreme Court of India issued directions for the prevention of sexual harassment at workplace in Vishaka v. State of Rajasthan.',
+      questionId: 'AIBE-13-Q008',
+      verified: true
+    }
+  ],
   top15: [
     {
       id: 'top-1',
@@ -1068,6 +1457,45 @@ export const CONSTITUTIONAL_LAW_QUICK_REF: QuickRefSubject = {
       significance: 'Established primacy of constitutional morality and sexual orientation as protected attribute under Art 15.',
       connectedArticles: ['Article 14', 'Article 15', 'Article 21'],
       connectedNodeId: 'node-art21',
+      tag: 'Certain',
+      examFrequency: 'High',
+    },
+    {
+      id: 'case-ajay-hasia',
+      name: 'Ajay Hasia v. Khalid Mujib',
+      citation: '(1981) 1 SCC 722',
+      year: 1981,
+      bench: '5 Judges (CJI Y.V. Chandrachud, Bhagwati, Krishna Iyer, Murtaza Fazal Ali, Koshal)',
+      holding: 'Laid down the authoritative 6-factor test to determine whether a corporation/society is an "agency or instrumentality of the State" under Article 12.',
+      significance: 'Standard authority on the definition and test of "Other Authorities" under Article 12.',
+      connectedArticles: ['Article 12'],
+      connectedNodeId: 'node-art12-state',
+      tag: 'Certain',
+      examFrequency: 'High',
+    },
+    {
+      id: 'case-royappa',
+      name: 'E.P. Royappa v. State of Tamil Nadu',
+      citation: '(1974) 4 SCC 3',
+      year: 1974,
+      bench: '5 Judges (CJI Ray, Palekar, Chandrachud, Bhagwati, Krishna Iyer)',
+      holding: 'Articulated the "New Doctrine of Equality": Equality is an activist dynamic concept which cannot be cribbed, cabined and confined within traditional limits. Equality and arbitrariness are sworn enemies.',
+      significance: 'Originated the non-arbitrariness doctrine under Article 14 later solidified in Maneka Gandhi.',
+      connectedArticles: ['Article 14'],
+      connectedNodeId: 'node-art14',
+      tag: 'Certain',
+      examFrequency: 'High',
+    },
+    {
+      id: 'case-l-chandra-kumar',
+      name: 'L. Chandra Kumar v. Union of India',
+      citation: '(1997) 3 SCC 261',
+      year: 1997,
+      bench: '7 Judges (CJI A.M. Ahmadi, Verma, Punchhi, Ramaswamy, S.P. Bharucha, Thomas, Kirpal)',
+      holding: 'Power of judicial review vested in the High Courts under Article 226 and the Supreme Court under Article 32 is an integral and untrammelled part of the Basic Structure. Administrative tribunals are subject to High Court Division Bench scrutiny.',
+      significance: 'Held Articles 323A(2)(d) and 323B(3)(d) unconstitutional to the extent they excluded High Court writ jurisdiction under 226/227.',
+      connectedArticles: ['Article 32', 'Article 226', 'Article 227'],
+      connectedNodeId: 'node-art32-226',
       tag: 'Certain',
       examFrequency: 'High',
     },

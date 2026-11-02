@@ -272,6 +272,37 @@ export interface QuickRefTop15Item {
   articleRef?: string;
 }
 
+export interface QuickRefChapter {
+  id: string;
+  chapterNumber: number | string;
+  title: string;
+  articlesOrSections: string;
+  keyConcepts: string[];
+  aibeRelevance: string;
+  examTrap?: string;
+  leadingCases?: string[];
+  category: 'foundations' | 'rights' | 'dpsp-duties' | 'governance' | 'judiciary' | 'federal' | 'emergency-amendment';
+}
+
+export interface QuickRefConceptChain {
+  id: string;
+  title: string;
+  steps: string[];
+  cases: string[];
+  takeaway: string;
+}
+
+export interface QuickRefQuestionLink {
+  id: string;
+  conceptOrArticle: string;
+  examId: string;
+  questionNumber: number;
+  year: number;
+  questionSnippet: string;
+  questionId: string;
+  verified: boolean;
+}
+
 export interface QuickRefSubject {
   subjectId: string;
   slug?: string;
@@ -286,6 +317,9 @@ export interface QuickRefSubject {
     leadingCasesCount: number;
     aibeQuestionCount: number;
   };
+  chapters?: QuickRefChapter[];
+  conceptChains?: QuickRefConceptChain[];
+  questionLinks?: QuickRefQuestionLink[];
   top15: QuickRefTop15Item[];
   mindmapRoot: MindNode;
   sections: QuickRefSection[];

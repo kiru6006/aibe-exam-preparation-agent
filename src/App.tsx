@@ -25,7 +25,7 @@ import { AboutView } from './components/AboutView';
 import { ExamView } from './components/ExamView';
 import { ResultView } from './components/ResultView';
 import { QuickReferenceView } from './components/QuickReferenceView';
-import { QuickRefSubjectView } from './components/QuickRefSubjectView';
+import { QuickReferenceMindMap } from './components/QuickReferenceMindMap';
 import { getQuickRef } from './data/quick-reference';
 
 export function App() {
@@ -391,7 +391,7 @@ export function App() {
 
         {currentTab === 'quick-ref' && (
           quickRefSubjectId && getQuickRef(quickRefSubjectId) ? (
-            <QuickRefSubjectView
+            <QuickReferenceMindMap
               subject={getQuickRef(quickRefSubjectId)!}
               onBackToIndex={() => {
                 setQuickRefSubjectId(null);
