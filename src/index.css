@@ -6,57 +6,65 @@
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-    /* Google Material-Inspired Indian Legal Theme Tokens */
-    --md-surface-ground: #F9F9FB; /* Warm neutral background */
-    --md-surface: #FFFFFF;        /* Crisp card surface */
-    --md-surface-variant: #F1F3F7; /* Secondary surface */
-    --md-surface-container: #E9ECF2; /* Subtle elevation */
-    
-    /* Primary: Deep Legal Navy */
-    --md-primary: #1A365D;
-    --md-primary-container: #E6EDF8;
-    --md-on-primary-container: #0D2342;
-    --md-primary-dark: #0F233D;
+    /* Vibrant Google-Inspired + Vignxs Crimson Palette */
+    --color-bg-main: #F5F7FB;
+    --color-surface-white: #FFFFFF;
+    --color-surface-muted: #F1F3F4;
 
-    /* Secondary: Professional Indian Legal Blue */
-    --md-secondary: #2B6CB0;
-    --md-secondary-container: #E2ECF7;
+    /* Vignxs Crimson Editorial Identity */
+    --brand-crimson: #C70234;
+    --brand-crimson-deep: #B6263A;
+    --brand-crimson-soft: #FCE8EF;
+    --brand-crimson-hover: #FCEEF2;
 
-    /* Accent: Muted Saffron / Amber Gold */
-    --md-accent: #C05621;
-    --md-accent-light: #FEEBC8;
-    --md-accent-gold: #D69E2E;
+    /* Google Core Primaries */
+    --google-blue: #1A73E8;
+    --google-blue-soft: #E8F0FE;
+    --google-green: #34A853;
+    --google-green-dark: #188038;
+    --google-green-soft: #E6F4EA;
+    --google-red: #EA4335;
+    --google-red-dark: #D93025;
+    --google-red-soft: #FCE8E6;
+    --google-yellow: #FBBC05;
+    --google-yellow-soft: #FEF7E0;
+    --google-purple: #A142F4;
+    --google-purple-soft: #F3E8FD;
+    --google-cyan: #00ACC1;
+    --google-cyan-soft: #E0F7FA;
 
-    /* Supporting: Subtle Indian Green */
-    --md-success: #22543D;
-    --md-success-light: #C6F6D5;
-    --md-success-text: #276749;
+    /* Typography & Borders */
+    --md-text-primary: #202124;
+    --md-text-secondary: #5F6368;
+    --md-text-muted: #80868B;
+    --md-outline: #DADCE0;
+    --md-outline-strong: #BDC1C6;
 
-    /* Status Colors */
-    --md-error: #9B2C2C;
-    --md-error-light: #FED7D7;
-    --md-withdrawn: #4A5568;
-    --md-withdrawn-light: #EDF2F7;
-
-    /* Outlines & Dividers */
-    --md-outline: #E2E8F0;
-    --md-outline-variant: #CBD5E0;
-    --md-text-primary: #1A202C;
-    --md-text-secondary: #4A5568;
-    --md-text-muted: #718096;
+    /* Preserved Compatibility Variables */
+    --md-surface-ground: var(--color-bg-main);
+    --md-surface: var(--color-surface-white);
+    --md-surface-variant: var(--color-surface-muted);
+    --md-primary: var(--google-blue);
+    --md-primary-container: var(--google-blue-soft);
+    --md-secondary: var(--brand-crimson);
+    --md-accent: var(--brand-crimson);
+    --md-accent-light: var(--brand-crimson-soft);
+    --md-success: var(--google-green-dark);
+    --md-success-light: var(--google-green-soft);
+    --md-error: var(--google-red);
+    --md-error-light: var(--google-red-soft);
   }
 
   body {
-    background-color: var(--md-surface-ground);
+    background-color: var(--color-bg-main);
     color: var(--md-text-primary);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-image: 
-      radial-gradient(#1A365D 0.5px, transparent 0.5px),
-      radial-gradient(#C05621 0.4px, #F9F9FB 0.4px);
-    background-size: 40px 40px;
-    background-position: 0 0, 20px 20px;
+      radial-gradient(#DADCE0 0.75px, transparent 0.75px);
+    background-size: 24px 24px;
+    background-position: 0 0;
     background-attachment: fixed;
   }
 

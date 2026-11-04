@@ -80,14 +80,14 @@ export const ResultView: React.FC<ResultViewProps> = ({
           <div className="flex items-center gap-2.5">
             <button
               onClick={onRetry}
-              className="flex items-center gap-1.5 px-3.5 py-2 border border-[#E8E2DA] text-[#1A365D] text-xs font-medium rounded-xl hover:bg-[#FAF8F5] transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 border border-[#DADCE0] text-[#202124] text-xs font-semibold rounded-xl bg-white hover:bg-[#F1F3F4] transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reattempt</span>
             </button>
             <button
               onClick={onExit}
-              className="px-3.5 py-2 bg-[#1A365D] hover:bg-[#2B6CB0] text-white text-xs font-semibold rounded-xl transition-colors shadow-xs"
+              className="px-3.5 py-2 bg-[#C70234] hover:bg-[#B6263A] text-white text-xs font-semibold rounded-xl transition-colors shadow-xs"
             >
               Dashboard
             </button>
@@ -96,46 +96,46 @@ export const ResultView: React.FC<ResultViewProps> = ({
 
         {/* Score Grid adhering strictly to Section 5 with Withdrawn Questions */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-6">
-          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#718096] block uppercase font-bold">Scorable Score</span>
+          <div className="p-4 rounded-xl bg-white border border-[#DADCE0] border-l-4 border-l-[#1A73E8] shadow-2xs">
+            <span className="text-[11px] font-mono text-[#1A73E8] block uppercase font-bold">Scorable Score</span>
             <div className="flex items-baseline gap-1 mt-1">
-              <span className="text-2xl sm:text-3xl font-serif font-bold text-[#1A365D]">{result.score}</span>
-              <span className="text-xs text-[#718096] font-mono">/ {result.scorableTotal || scorableQuestions.length}</span>
+              <span className="text-2xl sm:text-3xl font-serif font-bold text-[#202124]">{result.score}</span>
+              <span className="text-xs text-[#5F6368] font-mono">/ {result.scorableTotal || scorableQuestions.length}</span>
             </div>
             {result.passed !== undefined && (
-              <span className={`text-[10px] font-mono font-bold mt-1 inline-block px-1.5 py-0.5 rounded border ${result.passed
-                ? 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]'
-                : 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]'
+              <span className={`text-[10px] font-mono font-bold mt-1 inline-block px-1.5 py-0.5 rounded-full border ${result.passed
+                ? 'bg-[#E6F4EA] text-[#188038] border-[#34A853]/30'
+                : 'bg-[#FCE8E6] text-[#D93025] border-[#EA4335]/30'
                 }`}>
                 {result.passed ? 'QUALIFIED (≥45%)' : 'BELOW 45%'}
               </span>
             )}
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#22543D] block uppercase font-bold">Correct</span>
-            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#22543D] mt-1 block">
+          <div className="p-4 rounded-xl bg-white border border-[#DADCE0] border-l-4 border-l-[#34A853] shadow-2xs">
+            <span className="text-[11px] font-mono text-[#188038] block uppercase font-bold">Correct</span>
+            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#188038] mt-1 block">
               {result.correct}
             </span>
-            <span className="text-[11px] text-[#718096] mt-1 block font-mono">
+            <span className="text-[11px] text-[#5F6368] mt-1 block font-mono">
               {result.accuracy ? result.accuracy.toFixed(1) : 0}% Accuracy
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#991B1B] block uppercase font-bold">Wrong</span>
-            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#991B1B] mt-1 block">
+          <div className="p-4 rounded-xl bg-white border border-[#DADCE0] border-l-4 border-l-[#EA4335] shadow-2xs">
+            <span className="text-[11px] font-mono text-[#D93025] block uppercase font-bold">Wrong</span>
+            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#D93025] mt-1 block">
               {result.wrong}
             </span>
-            <span className="text-[11px] text-[#718096] mt-1 block font-mono">Needs revision</span>
+            <span className="text-[11px] text-[#5F6368] mt-1 block font-mono">Needs revision</span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">
-            <span className="text-[11px] font-mono text-[#718096] block uppercase font-bold">Unanswered</span>
-            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#4A5568] mt-1 block">
+          <div className="p-4 rounded-xl bg-white border border-[#DADCE0] border-l-4 border-l-[#FBBC05] shadow-2xs">
+            <span className="text-[11px] font-mono text-[#B06000] block uppercase font-bold">Unanswered</span>
+            <span className="text-2xl sm:text-3xl font-serif font-bold text-[#202124] mt-1 block">
               {result.unanswered}
             </span>
-            <span className="text-[11px] text-[#718096] mt-1 block font-mono">0 penalty</span>
+            <span className="text-[11px] text-[#5F6368] mt-1 block font-mono">0 penalty</span>
           </div>
 
           <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E2DA]">

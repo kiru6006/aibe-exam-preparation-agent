@@ -38,10 +38,18 @@ export const SubjectsView: React.FC<SubjectsViewProps> = ({
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#E8E2DA]">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-medium text-[#191919]">
-            Subject-Wise Practice
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#C70234] bg-[#FCE8EF] px-2 py-0.5 rounded border border-[#C70234]/20">
+              01 · SYLLABUS BREAKDOWN
+            </span>
+            <span className="text-[11px] font-bold uppercase tracking-widest text-[#80868B]">
+              BAR COUNCIL CURRICULUM
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#202124]">
+            Subject-Wise <span className="text-[#C70234]">Practice</span>
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C5852] mt-1 font-serif">
+          <p className="text-xs sm:text-sm text-[#5F6368] mt-1 font-serif">
             Official BCI 19-Subject syllabus breakdown with verified previous-year question sets.
           </p>
         </div>

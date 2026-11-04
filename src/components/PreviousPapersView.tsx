@@ -38,11 +38,19 @@ export const PreviousPapersView: React.FC<PreviousPapersViewProps> = ({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-6 font-sans">
       {/* Header */}
-      <div className="pb-6 border-b border-[#E8E2DA]">
-        <h1 className="text-2xl sm:text-3xl font-serif font-medium text-[#191919]">
-          Previous-Year Papers
+      <div className="pb-6 border-b border-[#DADCE0]">
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#C70234] bg-[#FCE8EF] px-2 py-0.5 rounded border border-[#C70234]/20">
+            01 · OFFICIAL PAPERS
+          </span>
+          <span className="text-[11px] font-bold uppercase tracking-widest text-[#80868B]">
+            ALL INDIA BAR EXAMINATION
+          </span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#202124]">
+          Previous-Year <span className="text-[#C70234]">Papers</span>
         </h1>
-        <p className="text-xs sm:text-sm text-[#5C5852] mt-1 font-serif max-w-2xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#5F6368] mt-1 font-serif max-w-2xl leading-relaxed">
           Simulate timed Bar Council examinations under official exam constraints with verified question sets.
         </p>
       </div>
@@ -123,52 +131,52 @@ export const PreviousPapersView: React.FC<PreviousPapersViewProps> = ({
             return (
               <div
                 key={exam.id}
-                className="bg-white rounded-2xl border border-[#E8E2DA] p-5 shadow-[0_1px_4px_rgba(0,0,0,0.02)] hover:border-[#CC785C] transition-all flex flex-col justify-between space-y-5"
+                className="bg-white rounded-2xl border border-[#DADCE0] border-t-4 border-t-[#1A73E8] hover:border-t-[#C70234] p-5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-5"
               >
                 <div>
-                  <div className="flex items-center justify-between pb-3 border-b border-[#F0ECE6]">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#7A5B43] bg-[#F4EFEA] border border-[#E8E2DA] px-2 py-0.5 rounded">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#DADCE0]">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#1A73E8] bg-[#E8F0FE] border border-[#1A73E8]/20 px-2 py-0.5 rounded-full">
                       {exam.year} Paper
                     </span>
-                    <span className="text-xs font-mono text-[#78716C]">
+                    <span className="text-xs font-mono text-[#80868B]">
                       {exam.set || "Official"}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-serif font-medium text-[#191919] mt-3">
+                  <h3 className="text-lg font-serif font-bold text-[#202124] mt-3">
                     {exam.name}
                   </h3>
 
                   <div className="grid grid-cols-3 gap-2 mt-4 text-xs font-mono">
-                    <div className="p-2.5 bg-[#FAF8F5] rounded-xl border border-[#E8E2DA] text-center">
-                      <span className="text-[#78716C] block text-[10px]">Questions</span>
-                      <span className="text-sm font-serif text-[#191919] block mt-0.5">
+                    <div className="p-2.5 bg-[#F8F9FA] rounded-xl border border-[#DADCE0] text-center">
+                      <span className="text-[#80868B] block text-[10px]">Questions</span>
+                      <span className="text-sm font-serif font-bold text-[#202124] block mt-0.5">
                         {availableCount}
                       </span>
                     </div>
 
-                    <div className="p-2.5 bg-[#FAF8F5] rounded-xl border border-[#E8E2DA] text-center">
-                      <span className="text-[#78716C] block text-[10px]">Duration</span>
-                      <span className="text-sm font-serif text-[#191919] block mt-0.5">
+                    <div className="p-2.5 bg-[#F8F9FA] rounded-xl border border-[#DADCE0] text-center">
+                      <span className="text-[#80868B] block text-[10px]">Duration</span>
+                      <span className="text-sm font-serif font-bold text-[#202124] block mt-0.5">
                         {exam.durationMinutes ? `${exam.durationMinutes}m` : 'Untimed'}
                       </span>
                     </div>
 
-                    <div className="p-2.5 bg-[#FAF8F5] rounded-xl border border-[#E8E2DA] text-center">
-                      <span className="text-[#78716C] block text-[10px]">Passing</span>
-                      <span className="text-sm font-serif text-[#191919] block mt-0.5">
+                    <div className="p-2.5 bg-[#F8F9FA] rounded-xl border border-[#DADCE0] text-center">
+                      <span className="text-[#80868B] block text-[10px]">Passing</span>
+                      <span className="text-sm font-serif font-bold text-[#188038] block mt-0.5">
                         {exam.passPercentage}%
                       </span>
                     </div>
                   </div>
 
-                  <div className="mt-4 text-xs text-[#5C5852] space-y-1 font-serif">
+                  <div className="mt-4 text-xs text-[#5F6368] space-y-1 font-serif">
                     <div className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#65A30D] shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#34A853] shrink-0" />
                       <span>No negative marking</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#65A30D] shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#34A853] shrink-0" />
                       <span>Original order & verified answer key</span>
                     </div>
                   </div>
@@ -176,10 +184,10 @@ export const PreviousPapersView: React.FC<PreviousPapersViewProps> = ({
 
                 <button
                   onClick={() => onStartExam(exam)}
-                  className="w-full py-2 bg-[#2A2825] hover:bg-black text-[#FAF8F5] font-medium rounded-xl text-xs shadow-xs transition-colors flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 bg-[#1A73E8] hover:bg-[#1557B0] text-white font-semibold rounded-xl text-xs shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Play className="w-3 h-3 fill-[#CC785C] text-[#CC785C]" />
-                  <span>Start Exam</span>
+                  <Play className="w-3.5 h-3.5 fill-white text-white" />
+                  <span>Start Full Simulation</span>
                 </button>
               </div>
             );
