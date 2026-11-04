@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import type { Question, Answer, ExamResult } from '../types';
 import { ExamEngine } from '../services/examEngine';
-import { 
-  HelpCircle, 
-  Flag, 
-  RotateCcw, 
-  Check, 
-  X, 
+import {
+  HelpCircle,
+  Flag,
+  RotateCcw,
+  Check,
+  X,
   ArrowRight,
   LayoutGrid,
   List,
@@ -103,11 +103,10 @@ export const ResultView: React.FC<ResultViewProps> = ({
               <span className="text-xs text-[#718096] font-mono">/ {result.scorableTotal || scorableQuestions.length}</span>
             </div>
             {result.passed !== undefined && (
-              <span className={`text-[10px] font-mono font-bold mt-1 inline-block px-1.5 py-0.5 rounded border ${
-                result.passed 
-                  ? 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]' 
-                  : 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]'
-              }`}>
+              <span className={`text-[10px] font-mono font-bold mt-1 inline-block px-1.5 py-0.5 rounded border ${result.passed
+                ? 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]'
+                : 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]'
+                }`}>
                 {result.passed ? 'QUALIFIED (≥45%)' : 'BELOW 45%'}
               </span>
             )}
@@ -195,11 +194,10 @@ export const ResultView: React.FC<ResultViewProps> = ({
                   <button
                     key={tab}
                     onClick={() => setFilter(tab)}
-                    className={`px-3 py-1.5 rounded-lg capitalize font-mono text-[11px] transition-colors ${
-                      filter === tab
-                        ? 'bg-[#1A365D] text-white font-bold shadow-xs'
-                        : 'text-[#4A5568] hover:bg-white'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg capitalize font-mono text-[11px] transition-colors ${filter === tab
+                      ? 'bg-[#1A365D] text-white font-bold shadow-xs'
+                      : 'text-[#4A5568] hover:bg-white'
+                      }`}
                   >
                     {tab} ({count})
                   </button>
@@ -394,13 +392,12 @@ export const ResultView: React.FC<ResultViewProps> = ({
                           <p className="line-clamp-2">{q.question}</p>
                         </td>
                         <td className="px-4 py-3 text-center font-mono">
-                          <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${
-                            !userChoice 
-                              ? 'bg-[#FAF8F5] text-[#718096]' 
-                              : isCorrect 
-                              ? 'bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0]' 
+                          <span className={`inline-flex px-2 py-0.5 rounded text-xs font-bold ${!userChoice
+                            ? 'bg-[#FAF8F5] text-[#718096]'
+                            : isCorrect
+                              ? 'bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0]'
                               : 'bg-[#FEF2F2] text-[#991B1B] border border-[#FECACA]'
-                          }`}>
+                            }`}>
                             {formatAnswerDisplay(userChoice)}
                           </span>
                         </td>
