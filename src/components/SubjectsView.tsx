@@ -26,7 +26,7 @@ export const SubjectsView: React.FC<SubjectsViewProps> = ({
   }, [questions]);
 
   const filteredSubjects = useMemo(() => {
-    return subjects.filter(s => 
+    return subjects.filter(s =>
       s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (s.shortName && s.shortName.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (s.description && s.description.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -70,11 +70,10 @@ export const SubjectsView: React.FC<SubjectsViewProps> = ({
           <div className="flex items-center gap-1 bg-[#FAF8F5] p-1 rounded-lg border border-[#E8E2DA]">
             <button
               onClick={() => setViewMode('card')}
-              className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
-                viewMode === 'card'
+              className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${viewMode === 'card'
                   ? 'bg-[#2A2825] text-white shadow-2xs'
                   : 'text-[#5C5852] hover:text-[#191919]'
-              }`}
+                }`}
               title="Card View"
               aria-label="Card View"
             >
@@ -83,11 +82,10 @@ export const SubjectsView: React.FC<SubjectsViewProps> = ({
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
-                viewMode === 'list'
+              className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${viewMode === 'list'
                   ? 'bg-[#2A2825] text-white shadow-2xs'
                   : 'text-[#5C5852] hover:text-[#191919]'
-              }`}
+                }`}
               title="List View"
               aria-label="List View"
             >
@@ -140,11 +138,10 @@ export const SubjectsView: React.FC<SubjectsViewProps> = ({
                       <button
                         onClick={() => onStartSubjectPractice(sub.id, 10)}
                         disabled={availableCount < 10}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-                          availableCount >= 10
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${availableCount >= 10
                             ? 'border-[#E8E2DA] text-[#2A2825] hover:bg-[#FAF8F5]'
                             : 'border-[#F0ECE6] text-[#A8A29E] cursor-not-allowed'
-                        }`}
+                          }`}
                       >
                         Practice 10
                       </button>

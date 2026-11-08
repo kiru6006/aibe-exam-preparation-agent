@@ -26,7 +26,7 @@ export const PreviousPapersView: React.FC<PreviousPapersViewProps> = ({
   const filteredExams = useMemo(() => {
     return exams.filter(exam => {
       const matchesYear = selectedYear === 'all' || String(exam.year) === selectedYear;
-      const matchesSearch = 
+      const matchesSearch =
         exam.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         String(exam.year).includes(searchQuery) ||
         (exam.set && exam.set.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -90,11 +90,10 @@ export const PreviousPapersView: React.FC<PreviousPapersViewProps> = ({
         <div className="flex items-center gap-1 self-end sm:self-auto bg-[#FAF8F5] p-1 rounded-lg border border-[#E8E2DA]">
           <button
             onClick={() => setViewMode('card')}
-            className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
-              viewMode === 'card'
+            className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${viewMode === 'card'
                 ? 'bg-[#2A2825] text-white shadow-2xs'
                 : 'text-[#5C5852] hover:text-[#191919]'
-            }`}
+              }`}
             title="Card View"
             aria-label="Card View"
           >
@@ -103,11 +102,10 @@ export const PreviousPapersView: React.FC<PreviousPapersViewProps> = ({
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
-              viewMode === 'list'
+            className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${viewMode === 'list'
                 ? 'bg-[#2A2825] text-white shadow-2xs'
                 : 'text-[#5C5852] hover:text-[#191919]'
-            }`}
+              }`}
             title="List View"
             aria-label="List View"
           >

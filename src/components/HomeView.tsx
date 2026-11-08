@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import type { Subject, Exam, Question, AibeStatistic } from '../types';
 import statisticsData from '../data/aibeStatistics.json';
 import { QUICK_REF } from '../data/quick-reference';
-import { 
-  BookOpen, 
-  Sparkles, 
-  Clock, 
-  ArrowRight, 
-  Scale, 
+import {
+  BookOpen,
+  Sparkles,
+  Clock,
+  ArrowRight,
+  Scale,
   RotateCcw,
   CheckCircle2,
   FileText,
@@ -90,19 +90,18 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   <ArrowRight className="w-3 h-3" />
                 </button>
               </div>
-              
+
               <div className="flex flex-wrap items-center gap-1.5">
                 {exams.map((ex, idx) => (
                   <button
                     key={ex.id}
                     onClick={() => onStartExam(ex)}
-                    className={`px-2.5 py-1.5 rounded-lg font-mono text-xs transition-all border ${
-                      idx === 0
+                    className={`px-2.5 py-1.5 rounded-lg font-mono text-xs transition-all border ${idx === 0
                         ? 'bg-[#C70234] text-white font-bold border-[#C70234] shadow-xs hover:bg-[#B6263A]'
                         : idx < 4
-                        ? 'bg-[#E8F0FE] hover:bg-[#1A73E8] hover:text-white text-[#1A73E8] font-bold border-[#1A73E8]/30'
-                        : 'bg-white hover:bg-[#F1F3F4] text-[#202124] font-medium border-[#DADCE0]'
-                    }`}
+                          ? 'bg-[#E8F0FE] hover:bg-[#1A73E8] hover:text-white text-[#1A73E8] font-bold border-[#1A73E8]/30'
+                          : 'bg-white hover:bg-[#F1F3F4] text-[#202124] font-medium border-[#DADCE0]'
+                      }`}
                     title={`${ex.name} - 100 Questions`}
                   >
                     {ex.name.replace(/ \(\d{4}\)/, '')}
@@ -140,19 +139,17 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     <button
                       key={sub.id}
                       onClick={() => onNavigate('quick-ref', sub.id)}
-                      className={`px-2.5 py-1.5 rounded-lg text-xs transition-all border flex items-center gap-1.5 ${
-                        hasQuickRef
+                      className={`px-2.5 py-1.5 rounded-lg text-xs transition-all border flex items-center gap-1.5 ${hasQuickRef
                           ? 'bg-[#1A73E8] text-white font-bold border-[#1A73E8] shadow-xs hover:bg-[#1557B0]'
                           : 'bg-white hover:bg-[#F1F3F4] text-[#202124] font-medium border-[#DADCE0]'
-                      }`}
+                        }`}
                       title={`${sub.name} (${sub.weightageQuestions} Qs) - Click for Quick Reference & Mind Map`}
                     >
                       <span>{sub.shortName || sub.name}</span>
-                      <span className={`text-[10px] px-1 py-0.2 rounded font-mono ${
-                        hasQuickRef 
-                          ? 'bg-white/20 text-white font-bold' 
+                      <span className={`text-[10px] px-1 py-0.2 rounded font-mono ${hasQuickRef
+                          ? 'bg-white/20 text-white font-bold'
                           : 'bg-[#F1F3F4] text-[#5F6368]'
-                      }`}>
+                        }`}>
                         {sub.weightageQuestions}Q
                       </span>
                       {hasQuickRef && (
@@ -346,13 +343,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span
-                      className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border ${
-                        sub.priority === 'Critical'
+                      className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border ${sub.priority === 'Critical'
                           ? 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]'
                           : sub.priority === 'High'
-                          ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
-                          : 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]'
-                      }`}
+                            ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
+                            : 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]'
+                        }`}
                     >
                       {sub.priority}
                     </span>
@@ -400,13 +396,12 @@ export const HomeView: React.FC<HomeViewProps> = ({
                       <td className="px-4 py-3 text-center font-mono font-bold text-[#1A365D]">{sub.officialWeightage}</td>
                       <td className="px-4 py-3 text-center">
                         <span
-                          className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border ${
-                            sub.priority === 'Critical'
+                          className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border ${sub.priority === 'Critical'
                               ? 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]'
                               : sub.priority === 'High'
-                              ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
-                              : 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]'
-                          }`}
+                                ? 'bg-[#FFFBEB] text-[#B45309] border-[#FDE68A]'
+                                : 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]'
+                            }`}
                         >
                           {sub.priority}
                         </span>
@@ -509,7 +504,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div 
+          <div
             onClick={() => onNavigate('strategy-priority')}
             className="p-5 rounded-xl bg-white border border-[#E8E2DA] hover:border-[#C05621] shadow-[0_1px_4px_rgba(0,0,0,0.02)] transition-all cursor-pointer group flex flex-col justify-between"
           >
@@ -528,7 +523,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </div>
 
-          <div 
+          <div
             onClick={() => onNavigate('strategy-repeats')}
             className="p-5 rounded-xl bg-white border border-[#E8E2DA] hover:border-[#C05621] shadow-[0_1px_4px_rgba(0,0,0,0.02)] transition-all cursor-pointer group flex flex-col justify-between"
           >
@@ -547,7 +542,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </div>
 
-          <div 
+          <div
             onClick={() => onNavigate('strategy-plans')}
             className="p-5 rounded-xl bg-white border border-[#E8E2DA] hover:border-[#C05621] shadow-[0_1px_4px_rgba(0,0,0,0.02)] transition-all cursor-pointer group flex flex-col justify-between"
           >
@@ -566,7 +561,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             </div>
           </div>
 
-          <div 
+          <div
             onClick={() => onNavigate('mistakes')}
             className="p-5 rounded-xl bg-white border border-[#E8E2DA] hover:border-[#C05621] shadow-[0_1px_4px_rgba(0,0,0,0.02)] transition-all cursor-pointer group flex flex-col justify-between"
           >

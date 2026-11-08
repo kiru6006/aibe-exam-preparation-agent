@@ -61,14 +61,17 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: 
+    background-image:
       radial-gradient(#DADCE0 0.75px, transparent 0.75px);
     background-size: 24px 24px;
     background-position: 0 0;
     background-attachment: fixed;
   }
 
-  h1, h2, h3, .font-legal-heading {
+  h1,
+  h2,
+  h3,
+  .font-legal-heading {
     font-family: var(--font-serif);
     letter-spacing: -0.015em;
   }
@@ -78,9 +81,11 @@
 .mat-elevation-1 {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
 }
+
 .mat-elevation-2 {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
 }
+
 .mat-elevation-3 {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
